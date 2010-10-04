@@ -2,6 +2,10 @@ package uk.ac.horizon.taxishare.model;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,6 +18,17 @@ public class Taxi
 		arriving,
 		arrived,
 		left
+	}
+
+	public Taxi()
+	{
+		
+	}
+	
+	public Taxi(final ResultSet resultSet) throws SQLException
+	{
+		id = resultSet.getLong(0);
+		
 	}
 	
 	private long id;
@@ -86,5 +101,63 @@ public class Taxi
 		writer.append("\"");		
 				
 		writer.append("}");
+	}
+	
+	public void add(final Connection connection) throws SQLException
+	{
+		assert(connection != null);
+		final Statement statement = connection.createStatement();
+		try
+		{
+			final String query = "INSERT INTO Taxi () ";						
+			final ResultSet result = statement.executeQuery(query);
+			while (result.next())
+			{
+			
+			}
+		}
+		finally
+		{
+			statement.close();
+		}
+	}
+	
+	public void update(final Connection connection) throws SQLException
+	{
+		assert(connection != null);
+		final Statement statement = connection.createStatement();
+		try
+		{
+			final String query = "UPDATE Taxi () WHERE id=" + id;						
+			final ResultSet result = statement.executeQuery(query);
+			while (result.next())
+			{
+			
+			}
+		}
+		finally
+		{
+			statement.close();
+		}
+	}
+	
+	public static Taxi get(final Connection connection, final long id) throws SQLException
+	{
+		assert(connection != null);
+		final Statement statement = connection.createStatement();
+		try
+		{
+			final String query = "SELECT * FROM Taxi WHERE id=" + id;						
+			final ResultSet result = statement.executeQuery(query);
+			while (result.next())
+			{
+			
+			}
+		}
+		finally
+		{
+			statement.close();
+		}
+		return null;		
 	}
 }
