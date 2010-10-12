@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+        http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+
+	<persistence-unit name="taxishare">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>uk.ac.horizon.taxishare.model.Destination</class>
+		<class>uk.ac.horizon.taxishare.model.Person</class>
+		<class>uk.ac.horizon.taxishare.model.Taxi</class>
+		<class>uk.ac.horizon.taxishare.model.TaxiCompany</class>		
+		<class>uk.ac.horizon.taxishare.model.Instance</class>		
+		<properties>
+			<property name="javax.persistence.jdbc.password" value="c4rsh4re" />
+			<property name="javax.persistence.jdbc.user" value="ec2-user" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql:///taxishare" />
+			<property name="eclipselink.logging.level" value="INFO" />
+			<property name="eclipselink.ddl-generation" value="create-tables" />
+			<property name="eclipselink.ddl-generation.output-mode"
+				value="database" />
+		</properties>
+	</persistence-unit>
+</persistence>
