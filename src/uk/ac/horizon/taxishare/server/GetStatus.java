@@ -15,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import uk.ac.horizon.taxishare.model.Instance;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class GetStatus extends HttpServlet
 {
 	private final static Logger logger = Logger.getLogger(GetStatus.class.getName());
-	
+
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
 			IOException
@@ -32,12 +35,13 @@ public class GetStatus extends HttpServlet
 		{
 			final long instanceID = Long.parseLong(instanceIDString);
 
-			EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
-			EntityManager entityManager = factory.createEntityManager();
+			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
+			final EntityManager entityManager = factory.createEntityManager();
 			final Instance instance = entityManager.find(Instance.class, instanceID);
 
 			final Writer writer = response.getWriter();
-			instance.toJSON(writer);
+			final Gson gson = new GsonBuilder().setExclusionStrategies(new ManyToOneExclusionStrategy()).create();
+			writer.write(gson.toJson(instance));
 		}
 		catch (final Exception e)
 		{

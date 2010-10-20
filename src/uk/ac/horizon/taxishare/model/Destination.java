@@ -1,7 +1,6 @@
 package uk.ac.horizon.taxishare.model;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.util.regex.Pattern;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,74 +13,60 @@ import com.sun.istack.internal.NotNull;
 @Entity
 public class Destination
 {
+	private static final Pattern postcodeRegEx = Pattern.compile("[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}");
+
+	public static String formatPostcode(final String postcode)
+	{
+		final String result = postcode.toUpperCase();
+		if (postcode.indexOf(' ') == -1) { return result.substring(0, result.length() - 3) + " "
+				+ result.substring(result.length() - 3); }
+		return result;
+	}
+
+	public static boolean isPostcode(final String destination)
+	{
+		return postcodeRegEx.matcher(destination).matches();
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
+
+	@Column(unique = true)
 	private String name;
+
 	@NotNull
-	@Column(length = 10)
+	@Column(length = 10, unique = true)
 	private String postcode;
 
 	public Destination()
 	{
-		
+
 	}
-	
+
 	public Destination(final String name, final String postcode)
 	{
 		this.name = name;
-		this.postcode = postcode;
+		this.postcode = formatPostcode(postcode);
 	}
 
-	public long getId()
+	public int getId()
 	{
 		return id;
 	}
 
-	public void setId(final long id)
-	{
-		this.id = id;
-	}
-	
 	public String getName()
 	{
 		return name;
-	}
-	
-	public void setName(final String name)
-	{
-		this.name = name;
 	}
 
 	public String getPostcode()
 	{
 		return postcode;
 	}
-	
-	public void setPostcode(final String postcode)
+
+	public void setName(final String name)
 	{
-		this.postcode = postcode;
-	}	
-
-	public void toJSON(final Writer writer) throws IOException
-	{
-		writer.append("{");
-
-		writer.append("\"id\": ");
-		writer.append(Long.toString(id));
-		writer.append(",");
-
-		writer.append("\"name\": ");
-		writer.append("\"");
-		writer.append(name);
-		writer.append("\"");
-		writer.append(",");
-
-		writer.append("\"postcode\": ");
-		writer.append("\"");
-		writer.append(postcode);
-		writer.append("\"");
-
-		writer.append("}");
+		this.name = name;
 	}
 }

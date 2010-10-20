@@ -1,7 +1,5 @@
 package uk.ac.horizon.taxishare.model;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.Date;
 
@@ -10,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,149 +23,142 @@ public class Taxi
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 
 	@NotNull
 	private Destination destination;
 
+	@OneToMany(mappedBy = "taxi")
 	private Collection<Person> people;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date pickupTime;
-	@Temporal(TemporalType.TIMESTAMP)	
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date requestTime;
-	@Temporal(TemporalType.TIMESTAMP)	
+
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date arrivalTime;
+
 	private int totalSpace;
+
+	private TaxiCompany company;
+
 	@ManyToOne
 	private Instance instance;
+
 	private float predictedCost;
-	private Status status;
+
+	private Status status = Status.unconfirmed;
 
 	public Taxi()
 	{
 
 	}
 
-	public void add(Person person)
+	public void add(final Person person)
 	{
 		people.add(person);
 	}
-	
-	public Status getStatus()
-	{
-		return status;
-	}
-	
-	public int getTotalSpace()
-	{
-		return totalSpace;
-	}
-	
+
 	public Date getArrivalTime()
 	{
 		return arrivalTime;
 	}
-	
-	public Date getPickupTime()
+
+	public int getAvailableSpace()
 	{
-		return pickupTime;
+		return totalSpace - people.size();
 	}
-	
-	public Iterable<Person> getPeople()
+
+	public TaxiCompany getCompany()
 	{
-		return people;
+		return company;
 	}
-	
-	public float getPredictedCost()
-	{
-		return predictedCost;
-	}
-	
-	public Date getRequestTime()
-	{
-		return requestTime;
-	}
-	
+
 	public Destination getDestination()
 	{
 		return destination;
 	}
-	
-	public void toJSON(final Writer writer) throws IOException
-	{
-		writer.append("{");
 
-		writer.append("\"id\": ");
-		writer.append(Long.toString(id));
-		writer.append(",");
-
-		writer.append("\"destination\": ");
-		destination.toJSON(writer);
-		writer.append(",");
-
-		writer.append("\"people\": ");
-		writer.append("[");
-		boolean comma = false;
-		for (final Person person : people)
-		{
-			if (comma)
-			{
-				writer.append(",");
-			}
-			else
-			{
-				comma = true;
-			}
-			person.toJSON(writer);
-		}
-		writer.append("]");
-		writer.append(",");
-
-		writer.append("\"requestTime\": ");
-		writer.append(Long.toString(requestTime.getTime()));
-		writer.append(",");
-
-		writer.append("\"arrivalTime\": ");
-		writer.append(Long.toString(arrivalTime.getTime()));
-		writer.append(",");
-
-		writer.append("\"pickupTime\": ");
-		writer.append(Long.toString(pickupTime.getTime()));
-		writer.append(",");
-
-		writer.append("\"totalSpace\": ");
-		writer.append(Integer.toString(totalSpace));
-		writer.append(",");
-
-		writer.append("\"spaceLeft\": ");
-		writer.append(Integer.toString(totalSpace - people.size()));
-		writer.append(",");
-
-		writer.append("\"predictedCost\": ");
-		writer.append(Float.toString(predictedCost));
-		writer.append(",");
-
-		writer.append("\"status\": ");
-		writer.append("\"");
-		writer.append(status.toString());
-		writer.append("\"");
-
-		writer.append("}");
-	}
-
-	public long getId()
+	public int getId()
 	{
 		return id;
 	}
 
 	public Instance getInstance()
 	{
-		return instance;		
+		return instance;
 	}
-	
-	public void setInstance(Instance instance)
+
+	public Iterable<Person> getPeople()
 	{
-		this.instance = instance;		
+		return people;
+	}
+
+	public Date getPickupTime()
+	{
+		return pickupTime;
+	}
+
+	public float getPredictedCost()
+	{
+		return predictedCost;
+	}
+
+	public Date getRequestTime()
+	{
+		return requestTime;
+	}
+
+	public Status getStatus()
+	{
+		return status;
+	}
+
+	public int getTotalSpace()
+	{
+		return totalSpace;
+	}
+
+	public void setArrivalTime(final Date arrivalTime)
+	{
+		this.arrivalTime = arrivalTime;
+	}
+
+	public void setDestination(final Destination destination)
+	{
+		this.destination = destination;
+	}
+
+	public void setInstance(final Instance instance)
+	{
+		this.instance = instance;
+	}
+
+	public void setPickupTime(final Date pickupTime)
+	{
+		this.pickupTime = pickupTime;
+	}
+
+	public void setPredictedCost(final float predictedCost)
+	{
+		this.predictedCost = predictedCost;
+	}
+
+	public void setRequestTime(final Date requestTime)
+	{
+		this.requestTime = requestTime;
+	}
+
+	public void setStatus(final Status status)
+	{
+		this.status = status;
+	}
+
+	public void setTotalSpace(final int totalSpace)
+	{
+		this.totalSpace = totalSpace;
 	}
 }

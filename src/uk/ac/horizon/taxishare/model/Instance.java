@@ -1,7 +1,6 @@
 package uk.ac.horizon.taxishare.model;
 
-import java.io.IOException;
-import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Entity;
@@ -16,12 +15,13 @@ import com.sun.istack.internal.NotNull;
 public class Instance
 {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
 	private Destination destination;
-	@OneToMany
-	private Collection<Taxi> taxis;
-	
+	@OneToMany(mappedBy = "instance")
+	private final Collection<Taxi> taxis = new ArrayList<Taxi>();
+	private boolean enabled = true;
+
 	@NotNull
 	private String number;
 
@@ -30,66 +30,43 @@ public class Instance
 
 	}
 
-	public long getID()
+	public void add(final Taxi taxi)
 	{
-		return id;
+		taxis.add(taxi);
 	}
-	
+
 	public Destination getDestination()
 	{
 		return destination;
 	}
 	
+	public boolean getEnabled()
+	{
+		return enabled;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
 	public String getNumber()
 	{
 		return number;
 	}
-	
-	public void add(final Taxi taxi)
-	{
-		taxis.add(taxi);
-	}
-	
+
 	public Iterable<Taxi> getTaxis()
 	{
 		return taxis;
 	}
 
-	public void toJSON(final Writer writer) throws IOException
+	public void setDestination(final Destination destination)
 	{
-		writer.append("{");
+		this.destination = destination;
+	}
 
-		writer.append("\"id\": ");
-		writer.append(Long.toString(id));
-		writer.append(",");
-
-		writer.append("\"number\": ");
-		writer.append("\"");
-		writer.append(number);
-		writer.append("\"");
-		writer.append(",");
-
-		writer.append("\"destination\": ");
-		destination.toJSON(writer);
-		writer.append(",");
-
-		writer.append("\"taxis\": ");
-		writer.append("[");
-		boolean comma = false;
-		for (final Taxi taxi : taxis)
-		{
-			if (comma)
-			{
-				writer.append(",");
-			}
-			else
-			{
-				comma = true;
-			}
-			taxi.toJSON(writer);
-		}
-		writer.append("]");
-
-		writer.append("}");
+	public void setNumber(final String number)
+	{
+		this.number = number;
 	}
 }
