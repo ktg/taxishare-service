@@ -3,7 +3,7 @@ package uk.ac.horizon.taxishare.server;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import uk.ac.horizon.taxishare.model.Destination;
+import uk.ac.horizon.taxishare.model.Location;
 import uk.ac.horizon.taxishare.model.Instance;
 import uk.ac.horizon.taxishare.model.Person;
 import uk.ac.horizon.taxishare.model.Taxi;
@@ -41,25 +41,25 @@ public class Server
 		return taxi;
 	}
 
-	public static Destination getDestination(final EntityManager entityManager, final String destinationName)
+	public static Location getLocation(final EntityManager entityManager, final String destinationName)
 	{
-		final String postcode = Destination.formatPostcode(destinationName);
-		if (Destination.isPostcode(postcode))
+		final String postcode = Location.formatPostcode(destinationName);
+		if (Location.isPostcode(postcode))
 		{
-			final Query query = entityManager.createQuery("SELECT d FROM Destination d WHERE d.postcode = :value");
+			final Query query = entityManager.createQuery("SELECT l FROM Location l WHERE l.postcode = :value");
 			query.setParameter("value", postcode);
-			final Destination destination = (Destination) query.getSingleResult();
+			final Location destination = (Location) query.getSingleResult();
 			if (destination != null) { return destination; }
-			final Destination newDest = new Destination(null, postcode);
+			final Location newDest = new Location(null, postcode);
 			entityManager.getTransaction().begin();
 			entityManager.persist(newDest);
 			entityManager.getTransaction().commit();
 			return newDest;
 		}
 
-		final Query query = entityManager.createQuery("SELECT d FROM Destination d WHERE LOWER(d.name) = :value");
+		final Query query = entityManager.createQuery("SELECT l FROM Location l WHERE LOWER(l.name) = :value");
 		query.setParameter("value", destinationName.toLowerCase());
-		return (Destination) query.getSingleResult();
+		return (Location) query.getSingleResult();
 	}
 
 	public static Person getPerson(final EntityManager entityManager, final String number)
@@ -96,7 +96,7 @@ public class Server
 	public static void requestTaxi(final EntityManager entityManager, final int instanceID, final String name,
 			final String number, final String destinationName)
 	{
-		final Destination destination = Server.getDestination(entityManager, destinationName);
+		final Location destination = Server.getLocation(entityManager, destinationName);
 		if (destination != null)
 		{
 			final Taxi taxi = getAvailableTaxi(entityManager, destination.getId(), instanceID);

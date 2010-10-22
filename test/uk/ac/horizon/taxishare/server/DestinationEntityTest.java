@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.ac.horizon.taxishare.model.Destination;
+import uk.ac.horizon.taxishare.model.Location;
 
 public class DestinationEntityTest
 {
@@ -28,33 +28,33 @@ public class DestinationEntityTest
 	@Test
 	public void testNameQuery()
 	{
-		final Query query = entityManager.createQuery("SELECT d FROM Destination d WHERE LOWER(d.name) = :value");
+		final Query query = entityManager.createQuery("SELECT l FROM Location l WHERE LOWER(l.name) = :value");
 		query.setParameter("value", "HoMe");
-		final Destination destination = (Destination) query.getSingleResult();
+		final Location destination = (Location) query.getSingleResult();
 		assert destination.getId() == TestHelper.getDestinationID();
 	}
 
 	@Test
 	public void testPostcodeQuery()
 	{
-		Destination destination = Server.getDestination(entityManager, "Ng9 2wb");
+		Location destination = Server.getLocation(entityManager, "Ng9 2wb");
 		assert destination.getId() == TestHelper.getDestinationID();
-		destination = Server.getDestination(entityManager, "ng92WB");
+		destination = Server.getLocation(entityManager, "ng92WB");
 		assert destination.getId() == TestHelper.getDestinationID();
-		destination = Server.getDestination(entityManager, "ng9 2wb");
+		destination = Server.getLocation(entityManager, "ng9 2wb");
 		assert destination.getId() == TestHelper.getDestinationID();
 	}
 
 	@Test
 	public void testRename()
 	{
-		Destination destination = entityManager.find(Destination.class, TestHelper.getDestinationID());
+		Location destination = entityManager.find(Location.class, TestHelper.getDestinationID());
 		assert destination.getName().equals("Home");
 		destination.setName("Rename");
 		entityManager.getTransaction().begin();
 		destination = entityManager.merge(destination);
 		entityManager.getTransaction().commit();
-		destination = entityManager.find(Destination.class, TestHelper.getDestinationID());
+		destination = entityManager.find(Location.class, TestHelper.getDestinationID());
 		assert destination.getName().equals("Rename");
 		destination.setName("Home");
 		entityManager.getTransaction().begin();

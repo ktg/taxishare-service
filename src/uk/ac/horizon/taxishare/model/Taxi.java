@@ -1,5 +1,6 @@
 package uk.ac.horizon.taxishare.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -23,14 +24,14 @@ public class Taxi
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int id;
 
 	@NotNull
-	private Destination destination;
+	private Location destination;
 
 	@OneToMany(mappedBy = "taxi")
-	private Collection<Person> people;
+	private Collection<Person> people = new ArrayList<Person>();;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date pickupTime;
@@ -77,7 +78,7 @@ public class Taxi
 		return company;
 	}
 
-	public Destination getDestination()
+	public Location getDestination()
 	{
 		return destination;
 	}
@@ -127,7 +128,7 @@ public class Taxi
 		this.arrivalTime = arrivalTime;
 	}
 
-	public void setDestination(final Destination destination)
+	public void setDestination(final Location destination)
 	{
 		this.destination = destination;
 	}
@@ -160,5 +161,15 @@ public class Taxi
 	public void setTotalSpace(final int totalSpace)
 	{
 		this.totalSpace = totalSpace;
+	}
+
+	public void remove(Person person)
+	{
+		people.remove(person);		
+	}
+
+	public void setCompany(TaxiCompany company)
+	{
+		this.company = company;		
 	}
 }

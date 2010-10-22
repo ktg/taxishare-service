@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -15,11 +14,13 @@ import com.sun.istack.internal.NotNull;
 public class Instance
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue
 	private int id;
-	private Destination destination;
+	@NotNull
+	private Location location;
+	private Collection<Location> destinations = new ArrayList<Location>();
 	@OneToMany(mappedBy = "instance")
-	private final Collection<Taxi> taxis = new ArrayList<Taxi>();
+	private Collection<Taxi> taxis = new ArrayList<Taxi>();
 	private boolean enabled = true;
 
 	@NotNull
@@ -34,10 +35,15 @@ public class Instance
 	{
 		taxis.add(taxi);
 	}
-
-	public Destination getDestination()
+	
+	public void add(final Location destination)
 	{
-		return destination;
+		destinations.add(destination);
+	}
+
+	public Location getLocation()
+	{
+		return location;
 	}
 	
 	public boolean getEnabled()
@@ -60,9 +66,14 @@ public class Instance
 		return taxis;
 	}
 
-	public void setDestination(final Destination destination)
+	public Iterable<Location> getDestinations()
 	{
-		this.destination = destination;
+		return destinations;
+	}
+	
+	public void setLocation(final Location location)
+	{
+		this.location = location;
 	}
 
 	public void setNumber(final String number)
