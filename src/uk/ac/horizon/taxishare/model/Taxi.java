@@ -31,7 +31,7 @@ public class Taxi
 	private Location destination;
 
 	@OneToMany(mappedBy = "taxi")
-	private Collection<Person> people = new ArrayList<Person>();;
+	private Collection<Person> people = new ArrayList<Person>();
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date pickupTime;
