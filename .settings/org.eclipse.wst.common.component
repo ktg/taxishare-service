@@ -3,7 +3,6 @@
     <wb-module deploy-name="taxishare-service">
         <wb-resource deploy-path="/" source-path="/war"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <property name="java-output-path" value="/taxisharing-service/build/classes"/>
         <property name="context-root" value="taxishare-service"/>
     </wb-module>

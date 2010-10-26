@@ -1,4 +1,7 @@
-#Fri Oct 22 14:48:47 BST 2010
+#Tue Oct 26 11:54:13 BST 2010
 eclipse.preferences.version=1
 org.eclipse.jpt.core.discoverAnnotatedClasses=true
 org.eclipse.jpt.core.platform=eclipselink2_1
+problem.PROJECT_NO_CONNECTION=info
+problem.TABLE_UNRESOLVED_NAME=info
+workspace_preferences_overriden=true
