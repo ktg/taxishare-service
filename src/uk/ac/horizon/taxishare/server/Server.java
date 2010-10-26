@@ -68,15 +68,36 @@ public class Server
 		query.setParameter("value", number);
 		return (Person) query.getSingleResult();
 	}
-
+	
+	public static Taxi getTaxi(final EntityManager entityManager, final String taxiID)
+	{
+		int id;
+		if(taxiID.toUpperCase().startsWith("TAXI"))
+		{
+			id = Integer.parseInt(taxiID.substring(4));
+		}
+		else
+		{
+			id = Integer.parseInt(taxiID);
+		}
+				
+		return entityManager.find(Taxi.class, id);
+	}
+	
 	public static void joinTaxi(final EntityManager entityManager, final String number, final String taxiID)
 	{
 		final Person person = getPerson(entityManager, number);
-		if (person != null)
+		final Taxi taxi = getTaxi(entityManager, taxiID);
+		if (person != null && taxi != null)
 		{
-			person.setTaxi(null);
+			final Taxi oldTaxi = person.setTaxi(taxi);
 			entityManager.getTransaction().begin();
 			entityManager.merge(person);
+			entityManager.merge(taxi);
+			if(oldTaxi != null)
+			{
+				entityManager.merge(oldTaxi);
+			}
 			entityManager.getTransaction().commit();
 		}
 	}
@@ -86,10 +107,14 @@ public class Server
 		final Person person = getPerson(entityManager, number);
 		if (person != null)
 		{
-			person.setTaxi(null);
-			entityManager.getTransaction().begin();
-			entityManager.merge(person);
-			entityManager.getTransaction().commit();
+			Taxi oldTaxi = person.setTaxi(null);
+			if(oldTaxi != null)
+			{
+				entityManager.getTransaction().begin();
+				entityManager.merge(person);
+				entityManager.merge(oldTaxi);			
+				entityManager.getTransaction().commit();
+			}
 		}
 	}
 
@@ -110,12 +135,14 @@ public class Server
 				person.setName(name);
 				person.setTaxi(taxi);
 				entityManager.merge(person);
+				entityManager.merge(taxi);
 			}
 			else
 			{
 				person = new Person(name, number);
 				person.setTaxi(taxi);
 				entityManager.persist(person);
+				entityManager.merge(taxi);				
 			}
 			entityManager.getTransaction().commit();
 		}

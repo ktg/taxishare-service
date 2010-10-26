@@ -59,8 +59,18 @@ public class Person
 		this.name = name;
 	}
 
-	public void setTaxi(final Taxi taxi)
+	public Taxi setTaxi(final Taxi taxi)
 	{
+		Taxi oldTaxi = this.taxi;
+		if(this.taxi != null)
+		{
+			this.taxi.remove(this);	
+		}
 		this.taxi = taxi;
+		if(taxi != null)
+		{
+			this.taxi.add(this);
+		}
+		return oldTaxi;
 	}
 }
