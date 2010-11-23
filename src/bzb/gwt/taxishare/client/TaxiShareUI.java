@@ -1,7 +1,9 @@
 package bzb.gwt.taxishare.client;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
@@ -9,7 +11,9 @@ import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
 import org.adamtacy.client.ui.effects.impl.Fade;
 import org.adamtacy.client.ui.effects.impl.Highlight;
 import org.adamtacy.client.ui.effects.impl.NShow;
+import org.adamtacy.client.ui.effects.impl.SlideLeft;
 
+import bzb.gwt.taxishare.client.model.Destination;
 import bzb.gwt.taxishare.client.model.Instance;
 import bzb.gwt.taxishare.client.model.Taxi;
 
@@ -35,6 +39,7 @@ public class TaxiShareUI implements EntryPoint {
 	
 	private static Instance instance;
 	
+	private static final Collection<String> destinations = new HashSet<String>();
 	private static int pageNum = 0;
 	
 	private static final int PAGE_TIMEOUT = 20000;
@@ -134,7 +139,7 @@ public class TaxiShareUI implements EntryPoint {
 				}
 				else
 				{
-					GWT.log("Response code: " + response.getStatusCode(), null);
+					GWT.log("Response code: " + response.getStatusCode(), null);			
 					// Handle the error. Can get the status text from response.getStatusText()
 				}				
 			}
@@ -142,8 +147,7 @@ public class TaxiShareUI implements EntryPoint {
 			@Override
 			public void onError(Request request, Throwable exception)
 			{
-				GWT.log(exception.getMessage(), exception);
-				
+				GWT.log(exception.getMessage(), exception);	
 			}
 		});
 	}
@@ -255,6 +259,26 @@ public class TaxiShareUI implements EntryPoint {
 				heightRemaining -= ph;
 			}
 			mp.addRoutes(instance.getLocation(), instance.getTaxis());			
+			
+			JsArray<Destination> newDests = instance.getDestinations();
+			for (int index = 0; index< newDests.length(); index++)
+			{
+				Destination destination = newDests.get(index);
+				if (!destinations.contains(destination.getName())) {
+					destinations.add(destination.getName());
+					Label thisDestination = new Label(destination.getName());
+					thisDestination.setStyleName("destinationLabel");
+					SlideLeft sl = new SlideLeft();
+					sl.setEffectElement(thisDestination.getElement());
+					hPanel.add(thisDestination);
+					sl.play();
+				}
+			}
+			if (hPanel.getOffsetWidth() > (double)Window.getClientWidth() * 0.6) {
+				RootPanel.get("destinationPanel").setStyleName("destinationPanelScroll");
+			} else {
+				RootPanel.get("destinationPanel").removeStyleName("destinationPanelScroll");
+			}
 		}
 		catch(Exception e)
 		{

@@ -1,6 +1,7 @@
 package uk.ac.horizon.taxishare.server;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -12,6 +13,8 @@ import uk.ac.horizon.taxishare.model.Taxi;
 
 public class Server
 {
+	private final static Logger logger = Logger.getLogger(Server.class.getName());
+	
 	public static boolean canAdd(final Taxi taxi)
 	{
 		return false;
@@ -21,7 +24,7 @@ public class Server
 	{
 		// TODO Check time
 		final Query query = entityManager
-				.createQuery("SELECT taxi FROM Taxi WHERE taxi.destinationID = :destID AND taxi.instanceID = :instID");
+				.createQuery("SELECT taxi FROM Taxi taxi WHERE taxi.destination.id = :destID AND taxi.instance.id = :instID");
 		query.setParameter("destID", destinationID);
 		query.setParameter("instID", instanceID);
 		@SuppressWarnings("unchecked")
@@ -32,6 +35,7 @@ public class Server
 		}
 
 		// create taxi
+		logger.info("Create taxi to " + destinationID);
 		final Instance instance = entityManager.find(Instance.class, instanceID);
 		final Taxi taxi = new Taxi();
 		taxi.setInstance(instance);
@@ -69,9 +73,16 @@ public class Server
 
 	public static Person getPerson(final EntityManager entityManager, final String number)
 	{
-		final Query query = entityManager.createQuery("SELECT p FROM Person p WHERE number =:value");
+		final Query query = entityManager.createQuery("SELECT p FROM Person p WHERE p.number = :value");
 		query.setParameter("value", number);
-		return (Person) query.getSingleResult();
+		try
+		{
+			return (Person) query.getSingleResult();
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
 	}
 	
 	public static Taxi getTaxi(final EntityManager entityManager, final String taxiID)
@@ -126,7 +137,9 @@ public class Server
 	public static void requestTaxi(final EntityManager entityManager, final int instanceID, final String name,
 			final String number, final String destinationName, final int spaces, final Date time)
 	{
-		final Location destination = Server.getLocation(entityManager, destinationName);
+		logger.info("Request Taxi for " + name + " on " + instanceID + " to " + destinationName);
+		
+		final Location destination = getLocation(entityManager, destinationName);
 		if (destination != null)
 		{
 			final Taxi taxi = getAvailableTaxi(entityManager, destination.getId(), instanceID, spaces, time);

@@ -5,9 +5,28 @@
 		<servlet-class>uk.ac.horizon.taxishare.server.GetInstance</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>reset</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.Reset</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>receiveMessage</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.ReceiveMessage</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>receiveMessage</servlet-name>
+		<url-pattern>/receiveMessage</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>reset</servlet-name>
+		<url-pattern>/reset</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>getInstance</servlet-name>
-		<url-pattern>/device/getInstance</url-pattern>
+		<url-pattern>/getInstance</url-pattern>
 	</servlet-mapping>
 </web-app>

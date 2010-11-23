@@ -13,6 +13,7 @@ public class TaxiShareServiceImpl implements TaxiShareService
 	
 	private void serverRequest(final String url, final RequestCallback callback)
 	{
+		GWT.log(url);
 		final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, URL.encode(url));
 		try
 		{
@@ -26,7 +27,7 @@ public class TaxiShareServiceImpl implements TaxiShareService
 
 	private String getHostURL()
 	{
-		String url = GWT.getModuleBaseURL();
+		String url = GWT.getHostPageBaseURL();
 		if(url.endsWith("taxishare-ui/"))
 		{
 			return url.substring(0, url.length() - "taxishare-ui/".length()) + "taxishare-service/";

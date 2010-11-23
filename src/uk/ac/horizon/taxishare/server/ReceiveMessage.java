@@ -29,14 +29,26 @@ public class ReceiveMessage extends HttpServlet
 	private static final DateFormat parser = new SimpleDateFormat("HH:mm");
 
 	@Override
+	public void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
+			IOException
+	{
+		doGet(request, response);
+	}
+
+	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
 			IOException
 	{
+		logger.info(request.getRequestURL().toString());
+
 		final String notificationType = request.getParameter("notificationType");
 		if (notificationType == null) { return; }
 
 		if (notificationType.equals("MessageReceived"))
 		{
+			logger.info("Message Received");
+			logger.info("From: " + request.getParameter("originator"));
+			logger.info("Body: " + request.getParameter("body"));
 			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
 			final EntityManager entityManager = factory.createEntityManager();
 
@@ -46,8 +58,9 @@ public class ReceiveMessage extends HttpServlet
 			{
 				message.setTimeReceived(formatter.parse(request.getParameter("receivedAt")));
 			}
-			catch (final ParseException e)
+			catch (final Exception e)
 			{
+				message.setTimeReceived(new Date());
 				logger.log(Level.WARNING, e.getMessage(), e);
 			}
 
@@ -80,33 +93,33 @@ public class ReceiveMessage extends HttpServlet
 					final Instance instance = (Instance) query.getSingleResult();
 
 					int spaces = 1;
-					if(tokenizer.hasMoreTokens())
+					if (tokenizer.hasMoreTokens())
 					{
 						final String spaceToken = tokenizer.nextToken();
 						try
 						{
 							spaces = Integer.parseInt(spaceToken);
 						}
-						catch(Exception e)
+						catch (final Exception e)
 						{
 							e.printStackTrace();
 						}
 					}
-					
+
 					Date time = null;
-					if(tokenizer.hasMoreTokens())
+					if (tokenizer.hasMoreTokens())
 					{
 						final String timeToken = tokenizer.nextToken();
 						try
 						{
 							time = parser.parse(timeToken);
 						}
-						catch (ParseException e)
+						catch (final ParseException e)
 						{
 							e.printStackTrace();
 						}
 					}
-					
+
 					Server.requestTaxi(	entityManager, instance.getId(), firstToken, message.getPhoneNumber(),
 										secondToken, spaces, time);
 				}
