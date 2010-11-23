@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,6 +26,7 @@ public class ReceiveMessage extends HttpServlet
 	private static final Logger logger = Logger.getLogger(ReceiveMessage.class.getName());
 
 	private static final DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static final DateFormat parser = new SimpleDateFormat("HH:mm");
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
@@ -69,7 +71,7 @@ public class ReceiveMessage extends HttpServlet
 
 				if (secondToken.toUpperCase().startsWith("TAXI"))
 				{
-					// TODO Join Taxi by Taxi ID
+					// Join Taxi by Taxi ID
 					Server.joinTaxi(entityManager, message.getPhoneNumber(), secondToken);
 				}
 				else
@@ -77,8 +79,36 @@ public class ReceiveMessage extends HttpServlet
 					final Query query = entityManager.createQuery("SELECT i FROM Instance i WHERE i.enabled = true");
 					final Instance instance = (Instance) query.getSingleResult();
 
+					int spaces = 1;
+					if(tokenizer.hasMoreTokens())
+					{
+						final String spaceToken = tokenizer.nextToken();
+						try
+						{
+							spaces = Integer.parseInt(spaceToken);
+						}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+						}
+					}
+					
+					Date time = null;
+					if(tokenizer.hasMoreTokens())
+					{
+						final String timeToken = tokenizer.nextToken();
+						try
+						{
+							time = parser.parse(timeToken);
+						}
+						catch (ParseException e)
+						{
+							e.printStackTrace();
+						}
+					}
+					
 					Server.requestTaxi(	entityManager, instance.getId(), firstToken, message.getPhoneNumber(),
-										secondToken);
+										secondToken, spaces, time);
 				}
 			}
 		}

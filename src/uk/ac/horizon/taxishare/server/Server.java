@@ -1,5 +1,7 @@
 package uk.ac.horizon.taxishare.server;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -15,8 +17,9 @@ public class Server
 		return false;
 	}
 
-	public static Taxi getAvailableTaxi(final EntityManager entityManager, final int destinationID, final int instanceID) // time
+	public static Taxi getAvailableTaxi(final EntityManager entityManager, final int destinationID, final int instanceID, final int spaces, final Date time)
 	{
+		// TODO Check time
 		final Query query = entityManager
 				.createQuery("SELECT taxi FROM Taxi WHERE taxi.destinationID = :destID AND taxi.instanceID = :instID");
 		query.setParameter("destID", destinationID);
@@ -25,13 +28,15 @@ public class Server
 		final Iterable<Taxi> taxis = query.getResultList();
 		for (final Taxi taxi : taxis)
 		{
-			if (taxi.getAvailableSpace() > 0) { return taxi; }
+			if (taxi.getAvailableSpace() >= spaces) { return taxi; }
 		}
 
 		// create taxi
 		final Instance instance = entityManager.find(Instance.class, instanceID);
 		final Taxi taxi = new Taxi();
 		taxi.setInstance(instance);
+		taxi.setPickupTime(time);
+		taxi.setRequestTime(new Date());
 		instance.add(taxi);
 
 		entityManager.getTransaction().begin();
@@ -119,12 +124,12 @@ public class Server
 	}
 
 	public static void requestTaxi(final EntityManager entityManager, final int instanceID, final String name,
-			final String number, final String destinationName)
+			final String number, final String destinationName, final int spaces, final Date time)
 	{
 		final Location destination = Server.getLocation(entityManager, destinationName);
 		if (destination != null)
 		{
-			final Taxi taxi = getAvailableTaxi(entityManager, destination.getId(), instanceID);
+			final Taxi taxi = getAvailableTaxi(entityManager, destination.getId(), instanceID, spaces, time);
 
 			assert (taxi != null);
 

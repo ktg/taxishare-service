@@ -14,6 +14,18 @@
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql:///taxishare" />
 			<property name="eclipselink.logging.level" value="INFO" />
+		</properties>
+	</persistence-unit>
+	
+		<persistence-unit name="taxishare-reset">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>	
+		<properties>
+			<property name="javax.persistence.jdbc.password" value="c4rsh4re" />
+			<property name="javax.persistence.jdbc.user" value="ec2-user" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql:///taxishare" />
+			<property name="eclipselink.logging.level" value="INFO" />
 			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
 		</properties>
 	</persistence-unit>

@@ -30,7 +30,7 @@ public class RequestTaxi extends HttpServlet
 			final String instance = request.getParameter("instance");
 
 			Server.requestTaxi(	entityManager, Integer.parseInt(instance), request.getParameter("name"),
-								request.getParameter("number"), request.getParameter("destination"));
+								request.getParameter("number"), request.getParameter("destination"), 1, null);
 		}
 		catch (final Exception e)
 		{

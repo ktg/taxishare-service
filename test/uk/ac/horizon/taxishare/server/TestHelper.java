@@ -44,7 +44,7 @@ public class TestHelper
 	{
 		if (!setup)
 		{
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
+			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare-reset");
 			entityManager = factory.createEntityManager();
 			destination = new Location("Home", "NG9 2WB");
 			source = new Location("EMCC", "NG7 2RJ");
