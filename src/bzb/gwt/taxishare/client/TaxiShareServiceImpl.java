@@ -32,6 +32,7 @@ public class TaxiShareServiceImpl implements TaxiShareService
 		{
 			return url.substring(0, url.length() - "taxishare-ui/".length()) + "taxishare-service/";
 		}
+		
 		return url;
 	}
 	

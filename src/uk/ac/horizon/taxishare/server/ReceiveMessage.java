@@ -84,8 +84,9 @@ public class ReceiveMessage extends HttpServlet
 
 				if (secondToken.toUpperCase().startsWith("TAXI"))
 				{
+					logger.info("Join taxi " + secondToken);
 					// Join Taxi by Taxi ID
-					Server.joinTaxi(entityManager, message.getPhoneNumber(), secondToken);
+					Server.joinTaxi(entityManager, firstToken, message.getPhoneNumber(), secondToken);
 				}
 				else
 				{
@@ -124,6 +125,7 @@ public class ReceiveMessage extends HttpServlet
 										secondToken, spaces, time);
 				}
 			}
+			entityManager.close();
 		}
 	}
 }

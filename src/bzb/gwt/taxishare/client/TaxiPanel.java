@@ -1,5 +1,8 @@
 package bzb.gwt.taxishare.client;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import bzb.gwt.taxishare.client.model.Taxi;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -14,12 +17,14 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TaxiPanel extends HorizontalPanel
 {
+	private static final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MMM-yyyy HH:mm:ss");
+	
 	public TaxiPanel(Taxi taxi)
 	{
 		setWidth((Window.getClientWidth() - 40) + "px");
 
 		DockPanel idPanel = new DockPanel();
-		Label idLabel = new Label("TAXI" + String.valueOf(taxi.getId() + 1));
+		Label idLabel = new Label("TAXI" + String.valueOf(taxi.getId()));
 		idLabel.addStyleName("idLabel");
 		idPanel.setHorizontalAlignment(DockPanel.ALIGN_CENTER);
 		idPanel.setVerticalAlignment(DockPanel.ALIGN_MIDDLE);
@@ -87,8 +92,16 @@ public class TaxiPanel extends HorizontalPanel
 		}
 		else
 		{
-			departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(taxi.getPickupTime()));
-			departureTimeLabel.addStyleName("departureTimeLabel");
+			try
+			{
+				departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(dateFormat.parse(taxi.getPickupTime())));
+				departureTimeLabel.addStyleName("departureTimeLabel");
+			}
+			catch (Exception e)
+			{
+				departureTimeLabel = new Label("unconfirmed");				
+				e.printStackTrace();
+			}
 		}
 		timePanel.add(departureTimeLabel);
 		timePanel.add(new Label("Journey:"));
@@ -99,9 +112,16 @@ public class TaxiPanel extends HorizontalPanel
 		}
 		else
 		{
-			arrivalTimeLabel = new Label(
-					(int) Math.round(((double) (taxi.getArrivalTime().getTime() - taxi.getPickupTime().getTime()) / 60.0)) + " mins");
-			arrivalTimeLabel.addStyleName("arrivalTimeLabel");
+			try
+			{
+				arrivalTimeLabel = new Label(
+						(int) Math.round(((double) (dateFormat.parse(taxi.getArrivalTime()).getTime() - dateFormat.parse(taxi.getPickupTime()).getTime()) / (60.0 * 1000))) + " mins");
+				arrivalTimeLabel.addStyleName("arrivalTimeLabel");
+			}
+			catch (Exception e)
+			{
+				arrivalTimeLabel = new Label("unconfirmed");
+			}
 		}
 		timePanel.add(arrivalTimeLabel);
 

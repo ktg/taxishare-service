@@ -131,6 +131,7 @@ public class TaxiShareUI implements EntryPoint {
 					try
 					{
 						parseResponse(response.getText());
+						//parseResponse("{\"id\":7,\"location\":{\"id\":2,\"name\":\"EMCC\",\"postcode\":\"NG7 2RJ\"},\"destinations\":[{\"id\":4,\"name\":\"TrainStation\",\"postcode\":\"NG2 3AQ\"},{\"id\":5,\"name\":\"MarketSquare\",\"postcode\":\"NG1 6HL\"},{\"id\":6,\"name\":\"Jubilee\",\"postcode\":\"NG8 1BB\"}],\"taxis\":[{\"id\":1,\"destination\":{\"id\":4,\"name\":\"TrainStation\",\"postcode\":\"NG2 3AQ\"},\"people\":[{\"id\":3,\"name\":\"Kevin\",\"number\":\"07796698175\"}],\"requestTime\":\"23-Nov-2010 14:34:53\",\"totalSpace\":4,\"company\":{\"id\":1,\"name\":\"DG Cars\",\"number\":\"01159607607\"},\"predictedCost\":20.0,\"status\":\"unconfirmed\"},{\"id\":51,\"people\":[{\"id\":52,\"name\":\"Ben\",\"number\":\"07796698176\"}],\"requestTime\":\"23-Nov-2010 14:36:57\",\"totalSpace\":0,\"predictedCost\":0.0,\"status\":\"unconfirmed\"}],\"enabled\":true,\"number\":\"0123456789\"}");
 					}
 					catch (final Exception e)
 					{
@@ -245,12 +246,17 @@ public class TaxiShareUI implements EntryPoint {
 			int currPage = 0;
 			JsArray<Taxi> taxis = instance.getTaxis();
 			for (int i = 0; i < taxis.length(); i++) {
+				Taxi taxi = taxis.get(i);
+				if(taxi.getPeople().length() == 0)
+				{
+					continue;
+				}
 				if (heightRemaining < 0) {
 					heightRemaining = heightToFill;
 					currPage++;
 				}
 				
-				TaxiPanel p = new TaxiPanel(taxis.get(i));
+				TaxiPanel p = new TaxiPanel(taxi);
 				if (pages.size() <= currPage) {
 					pages.add(currPage, new ArrayList<TaxiPanel>());
 				}

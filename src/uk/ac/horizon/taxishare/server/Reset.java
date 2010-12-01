@@ -2,6 +2,8 @@ package uk.ac.horizon.taxishare.server;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,11 +15,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+
 import uk.ac.horizon.taxishare.model.Instance;
 import uk.ac.horizon.taxishare.model.Location;
 import uk.ac.horizon.taxishare.model.Person;
 import uk.ac.horizon.taxishare.model.Taxi;
 import uk.ac.horizon.taxishare.model.TaxiCompany;
+import uk.ac.horizon.taxishare.model.Taxi.Status;
 
 public class Reset extends HttpServlet
 {
@@ -31,7 +36,10 @@ public class Reset extends HttpServlet
 
 		try
 		{
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare-reset");
+			Map<String, String> persistProperties = new HashMap<String, String>();
+			persistProperties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+			
+			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare", persistProperties);
 			final EntityManager entityManager = factory.createEntityManager();
 
 			Location source = new Location("EMCC", "NG7 2RJ");
@@ -49,7 +57,11 @@ public class Reset extends HttpServlet
 			
 			Taxi taxi = new Taxi();
 			taxi.setTotalSpace(4);
-			taxi.setRequestTime(new Date());
+			long now = new Date().getTime();
+			taxi.setRequestTime(new Date(now));
+			taxi.setArrivalTime(new Date(now + (35 * 60 * 1000)));
+			taxi.setPickupTime(new Date(now + (20 * 60 * 1000)));
+			taxi.setStatus(Status.confirmed);
 			taxi.setDestination(destination);
 			taxi.setPredictedCost(20.0f);
 			taxi.setCompany(taxiCompany);
@@ -72,10 +84,14 @@ public class Reset extends HttpServlet
 			entityManager.persist(destination3);			
 			entityManager.persist(instance);
 			entityManager.getTransaction().commit();
+			entityManager.close();
+			
+			response.getWriter().println("Reset OK");
 		}
 		catch (final Exception e)
 		{
 			logger.log(Level.WARNING, e.getMessage(), e);
+			e.printStackTrace(response.getWriter());
 		}
 	}
 }

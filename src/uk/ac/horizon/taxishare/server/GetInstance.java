@@ -47,10 +47,12 @@ public class GetInstance extends HttpServlet
 				final Query query = entityManager.createQuery("SELECT i FROM Instance i WHERE i.enabled = true");
 				instance = (Instance) query.getSingleResult();
 			}
-
+			entityManager.close();
+			
 			final Writer writer = response.getWriter();
 			final Gson gson = new GsonBuilder().setExclusionStrategies(new ManyToOneExclusionStrategy()).create();
 			writer.write(gson.toJson(instance));
+			logger.info(gson.toJson(instance));
 		}
 		catch (final Exception e)
 		{
