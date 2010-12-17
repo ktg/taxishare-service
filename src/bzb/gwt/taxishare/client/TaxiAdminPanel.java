@@ -138,7 +138,7 @@ public class TaxiAdminPanel extends Composite
 	void handleCompanyClick(final ClickEvent e)
 	{
 		statusSelect.setTaxi(taxi.getId(), service);
-		statusSelect.setPopupPosition(e.getX(), e.getY());
+		statusSelect.setPopupPosition(e.getClientX(), e.getClientY());
 		statusSelect.show();
 	}	
 	
