@@ -15,6 +15,46 @@
 		<servlet-class>uk.ac.horizon.taxishare.server.ReceiveMessage</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>setTime</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.SetTime</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>setFare</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.SetFare</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>setStatus</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.SetStatus</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>setCompany</servlet-name>		
+		<servlet-class>uk.ac.horizon.taxishare.server.SetCompany</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>setCompany</servlet-name>
+		<url-pattern>/setCompany</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>setStatus</servlet-name>
+		<url-pattern>/setStatus</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>setTime</servlet-name>
+		<url-pattern>/setTime</url-pattern>
+	</servlet-mapping>	
+
+	<servlet-mapping>
+		<servlet-name>setFare</servlet-name>
+		<url-pattern>/setFare</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>receiveMessage</servlet-name>
 		<url-pattern>/receiveMessage</url-pattern>
