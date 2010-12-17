@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import uk.ac.horizon.taxishare.model.Taxi;
-import uk.ac.horizon.taxishare.model.TaxiCompany;
+import uk.ac.horizon.taxishare.model.Taxi.Status;
 
 public class SetStatus extends HttpServlet
 {
@@ -23,26 +23,18 @@ public class SetStatus extends HttpServlet
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
 			IOException
 	{
-		logger.info(request.getRequestURL().toString());
-
 		try
 		{
 			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
 			final EntityManager entityManager = factory.createEntityManager();
 
 			int taxiID = Integer.parseInt(request.getParameter("taxiID"));
-			Taxi taxi = entityManager.find(Taxi.class, taxiID);			
-			if(request.getParameter("taxiCompanyID") != null)
-			{
-				int taxiCompanyID = Integer.parseInt(request.getParameter("taxiCompanyID"));
-	
-				TaxiCompany taxiCompany = entityManager.find(TaxiCompany.class, taxiCompanyID);
-				taxi.setCompany(taxiCompany);
-			}
-			else
-			{
-				taxi.setCompany(null);
-			}
+			String status = request.getParameter("status").toLowerCase();
+		
+			logger.info("Set Status: TAXI" + taxiID + " to " + status);
+			
+			Taxi taxi = entityManager.find(Taxi.class, taxiID);
+			taxi.setStatus(Status.valueOf(status));
 			
 			entityManager.getTransaction().begin();
 			entityManager.merge(taxi);
