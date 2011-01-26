@@ -26,8 +26,9 @@ public class Message
 	@NotNull
 	private String phoneNumber; // UserID
 	private boolean incoming;
-//	private Provider provider;
-//	private Application application;
+
+	// private Provider provider;
+	// private Application application;
 
 	public Message()
 	{
@@ -39,7 +40,12 @@ public class Message
 		this.phoneNumber = number;
 		this.incoming = incoming;
 	}
-	
+
+	public String getBody()
+	{
+		return body;
+	}
+
 	public long getId()
 	{
 		return id;
@@ -48,11 +54,6 @@ public class Message
 	public Date getLastUpdate()
 	{
 		return lastUpdate;
-	}
-
-	public String getBody()
-	{
-		return body;
 	}
 
 	public String getPhoneNumber()

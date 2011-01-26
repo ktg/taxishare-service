@@ -123,9 +123,19 @@ public class Taxi
 		return totalSpace;
 	}
 
+	public void remove(final Person person)
+	{
+		people.remove(person);
+	}
+
 	public void setArrivalTime(final Date arrivalTime)
 	{
 		this.arrivalTime = arrivalTime;
+	}
+
+	public void setCompany(final TaxiCompany company)
+	{
+		this.company = company;
 	}
 
 	public void setDestination(final Location destination)
@@ -161,15 +171,5 @@ public class Taxi
 	public void setTotalSpace(final int totalSpace)
 	{
 		this.totalSpace = totalSpace;
-	}
-
-	public void remove(Person person)
-	{
-		people.remove(person);		
-	}
-
-	public void setCompany(TaxiCompany company)
-	{
-		this.company = company;		
 	}
 }

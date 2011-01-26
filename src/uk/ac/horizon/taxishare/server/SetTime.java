@@ -37,8 +37,9 @@ public class SetTime extends HttpServlet
 			final String timeString = request.getParameter("time");
 			final String type = request.getParameter("type");
 
-			logger.info(request.getRequestURI().toString() + "Type: " + type + ", taxi: " + taxiID + ", time: " + timeString);
-			
+			logger.info(request.getRequestURI().toString() + "Type: " + type + ", taxi: " + taxiID + ", time: "
+					+ timeString);
+
 			Date parsed = null;
 			try
 			{

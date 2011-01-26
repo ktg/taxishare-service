@@ -61,13 +61,13 @@ public class Person
 
 	public Taxi setTaxi(final Taxi taxi)
 	{
-		Taxi oldTaxi = this.taxi;
-		if(this.taxi != null)
+		final Taxi oldTaxi = this.taxi;
+		if (this.taxi != null)
 		{
-			this.taxi.remove(this);	
+			this.taxi.remove(this);
 		}
 		this.taxi = taxi;
-		if(taxi != null)
+		if (taxi != null)
 		{
 			this.taxi.add(this);
 		}

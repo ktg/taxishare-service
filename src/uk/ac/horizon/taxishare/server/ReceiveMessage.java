@@ -21,6 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 import uk.ac.horizon.taxishare.model.Instance;
 import uk.ac.horizon.taxishare.model.Message;
 
+/**
+ * Servlet to recieve a text message from Esendex.
+ * 
+ * @author Kevin Glover
+ */
 public class ReceiveMessage extends HttpServlet
 {
 	private static final Logger logger = Logger.getLogger(ReceiveMessage.class.getName());

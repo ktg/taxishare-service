@@ -19,6 +19,12 @@ import uk.ac.horizon.taxishare.model.Instance;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+/**
+ * Servlet that returns an {@link uk.ac.horizon.taxishare.model.Instance} as JSON. If no instance id
+ * is given, it will return a single enabled instance.
+ * 
+ * @author Kevin Glover
+ */
 public class GetInstance extends HttpServlet
 {
 	private final static Logger logger = Logger.getLogger(GetInstance.class.getName());
@@ -48,7 +54,7 @@ public class GetInstance extends HttpServlet
 				instance = (Instance) query.getSingleResult();
 			}
 			entityManager.close();
-			
+
 			final Writer writer = response.getWriter();
 			final Gson gson = new GsonBuilder().setExclusionStrategies(new ManyToOneExclusionStrategy()).create();
 			writer.write(gson.toJson(instance));

@@ -1,6 +1,5 @@
 package bzb.gwt.taxishare.client.model;
 
-
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 
@@ -11,12 +10,14 @@ public class Taxi extends JavaScriptObject
 		unconfirmed, confirmed, arriving, arrived, left, cancel
 	}
 
-	protected Taxi() {}
+	protected Taxi()
+	{
+	}
 
 	public final native String getArrivalTime() /*-{ return this.arrivalTime; }-*/;
 
 	public final native TaxiCompany getCompany() /*-{ return this.company; }-*/;
-	
+
 	public final native Destination getDestination() /*-{ return this.destination; }-*/;
 
 	public final native int getId() /*-{ return this.id }-*/;
@@ -31,10 +32,10 @@ public class Taxi extends JavaScriptObject
 
 	public final native String getStatus() /*-{ return this.status; }-*/;
 
-//	public int getAvailableSpace()
-//	{
-//		return totalSpace - people.size();
-//	}
-	
+	// public int getAvailableSpace()
+	// {
+	// return totalSpace - people.size();
+	// }
+
 	public final native int getTotalSpace() /*-{ return this.totalSpace; }-*/;
 }

@@ -10,6 +10,11 @@ import javax.persistence.OneToMany;
 
 import com.sun.istack.internal.NotNull;
 
+/**
+ * Represents a single instance of a
+ * 
+ * @author Kevin Glover
+ */
 @Entity
 public class Instance
 {
@@ -31,21 +36,21 @@ public class Instance
 
 	}
 
-	public void add(final Taxi taxi)
-	{
-		taxis.add(taxi);
-	}
-	
 	public void add(final Location destination)
 	{
 		destinations.add(destination);
 	}
 
-	public Location getLocation()
+	public void add(final Taxi taxi)
 	{
-		return location;
+		taxis.add(taxi);
 	}
-	
+
+	public Iterable<Location> getDestinations()
+	{
+		return destinations;
+	}
+
 	public boolean getEnabled()
 	{
 		return enabled;
@@ -54,6 +59,11 @@ public class Instance
 	public int getId()
 	{
 		return id;
+	}
+
+	public Location getLocation()
+	{
+		return location;
 	}
 
 	public String getNumber()
@@ -66,11 +76,6 @@ public class Instance
 		return taxis;
 	}
 
-	public Iterable<Location> getDestinations()
-	{
-		return destinations;
-	}
-	
 	public void setLocation(final Location location)
 	{
 		this.location = location;

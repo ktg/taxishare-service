@@ -9,25 +9,64 @@ import com.google.gwt.http.client.URL;
 
 public class TaxiShareServiceImpl implements TaxiShareService
 {
-	public TaxiShareServiceImpl()
-	{
-	}
-	
 	private final RequestCallback defaultCallback = new RequestCallback()
 	{
 		@Override
-		public void onResponseReceived(Request request, Response response)
+		public void onError(final Request request, final Throwable exception)
 		{
-			GWT.log(response.getStatusCode() + ": " + response.getStatusText());			
+			GWT.log(exception.getMessage(), exception);
 		}
-		
+
 		@Override
-		public void onError(Request request, Throwable exception)
+		public void onResponseReceived(final Request request, final Response response)
 		{
-			GWT.log(exception.getMessage(), exception);			
+			GWT.log(response.getStatusCode() + ": " + response.getStatusText());
 		}
 	};
-	
+
+	public TaxiShareServiceImpl()
+	{
+	}
+
+	@Override
+	public void getInstance(final RequestCallback callback)
+	{
+		serverRequest(getHostURL() + "getInstance", callback);
+	}
+
+	@Override
+	public void setCompany(final int taxiID, final String taxiCompanyID)
+	{
+		serverRequest(getHostURL() + "setCompany?taxiID=" + taxiID + "&taxiCompanyID=" + taxiCompanyID, defaultCallback);
+	}
+
+	@Override
+	public void setFare(final int taxiID, final String text)
+	{
+		serverRequest(getHostURL() + "setFare?taxiID=" + taxiID + "&fare=" + text, defaultCallback);
+	}
+
+	@Override
+	public void setStatus(final int taxiID, final String text)
+	{
+		serverRequest(getHostURL() + "setStatus?taxiID=" + taxiID + "&status=" + text, defaultCallback);
+	}
+
+	@Override
+	public void setTime(final int taxiID, final String time, final String type)
+	{
+		serverRequest(getHostURL() + "setTime?taxiID=" + taxiID + "&time=" + time + "&type=" + type, defaultCallback);
+	}
+
+	private String getHostURL()
+	{
+		final String url = GWT.getHostPageBaseURL();
+		if (url.endsWith("taxishare-ui/")) { return url.substring(0, url.length() - "taxishare-ui/".length())
+				+ "taxishare-service/"; }
+
+		return url;
+	}
+
 	private void serverRequest(final String url, final RequestCallback callback)
 	{
 		GWT.log(url);
@@ -41,45 +80,4 @@ public class TaxiShareServiceImpl implements TaxiShareService
 			GWT.log(e.getMessage(), e);
 		}
 	}
-
-	private String getHostURL()
-	{
-		String url = GWT.getHostPageBaseURL();
-		if(url.endsWith("taxishare-ui/"))
-		{
-			return url.substring(0, url.length() - "taxishare-ui/".length()) + "taxishare-service/";
-		}
-		
-		return url;
-	}
-	
-	@Override
-	public void getInstance(final RequestCallback callback)
-	{
-		serverRequest(getHostURL() + "getInstance", callback);
-	}
-
-	@Override
-	public void setTime(int taxiID, String time, String type)
-	{
-		serverRequest(getHostURL() + "setTime?taxiID=" + taxiID + "&time=" + time + "&type=" + type, defaultCallback);		
-	}
-
-	@Override
-	public void setFare(int taxiID, String text)
-	{
-		serverRequest(getHostURL() + "setFare?taxiID=" + taxiID + "&fare=" + text, defaultCallback);
-	}
-
-	@Override
-	public void setStatus(int taxiID, String text)
-	{
-		serverRequest(getHostURL() + "setStatus?taxiID=" + taxiID + "&status=" + text, defaultCallback);		
-	}
-	
-	@Override
-	public void setCompany(int taxiID, String taxiCompanyID)
-	{
-		serverRequest(getHostURL() + "setCompany?taxiID=" + taxiID + "&taxiCompanyID=" + taxiCompanyID, defaultCallback);		
-	}	
 }

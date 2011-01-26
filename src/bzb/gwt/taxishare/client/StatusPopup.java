@@ -12,45 +12,45 @@ import com.google.gwt.user.client.ui.Widget;
 public class StatusPopup extends PopupPanel
 {
 
-	private static StatusPopupUiBinder uiBinder = GWT.create(StatusPopupUiBinder.class);
-
 	interface StatusPopupUiBinder extends UiBinder<Widget, StatusPopup>
 	{
 	}
-	
+
+	private static StatusPopupUiBinder uiBinder = GWT.create(StatusPopupUiBinder.class);
+
 	private int taxiID;
 	private TaxiShareService service;
-	
+
+	@UiField
+	Button unconfirmed;
+
+	@UiField
+	Button confirmed;
+
+	@UiField
+	Button arriving;
+
+	@UiField
+	Button arrived;
+
+	@UiField
+	Button left;
+
 	public StatusPopup()
 	{
 		add(uiBinder.createAndBindUi(this));
 	}
 
-	@UiField
-	Button unconfirmed;
-	
-	@UiField
-	Button confirmed;
-	
-	@UiField
-	Button arriving;	
-
-	@UiField
-	Button arrived;	
-
-	@UiField
-	Button left;	
-	
-	public void setTaxi(int taxiID, TaxiShareService service)
+	public void setTaxi(final int taxiID, final TaxiShareService service)
 	{
 		this.taxiID = taxiID;
 		this.service = service;
 	}
 
-	@UiHandler({"unconfirmed", "confirmed", "arriving", "arrived", "left"})
-	void handleClick(ClickEvent e)
+	@UiHandler({ "unconfirmed", "confirmed", "arriving", "arrived", "left" })
+	void handleClick(final ClickEvent e)
 	{
-		service.setStatus(taxiID, ((Button)e.getSource()).getText());
+		service.setStatus(taxiID, ((Button) e.getSource()).getText());
 		hide();
 	}
 }

@@ -28,18 +28,18 @@ public class SetFare extends HttpServlet
 		{
 			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
 			final EntityManager entityManager = factory.createEntityManager();
-			
-			int taxiID = Integer.parseInt(request.getParameter("taxiID"));
+
+			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
 			String fareString = request.getParameter("fare");
-			
-			if(fareString.startsWith("£"))
+
+			if (fareString.startsWith("£"))
 			{
 				fareString = fareString.substring(1);
 			}
-			
-			float fare = Float.parseFloat(fareString);
-			
-			Taxi taxi = entityManager.find(Taxi.class, taxiID);
+
+			final float fare = Float.parseFloat(fareString);
+
+			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
 			taxi.setPredictedCost(fare);
 			entityManager.getTransaction().begin();
 			entityManager.merge(taxi);

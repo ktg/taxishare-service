@@ -13,7 +13,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -41,7 +40,7 @@ public class TaxiAdminPanel extends Composite
 
 	@UiField
 	Label company;
-	
+
 	@UiField
 	TextBox fare;
 
@@ -63,7 +62,7 @@ public class TaxiAdminPanel extends Composite
 		final String oldArrival = this.taxi.getArrivalTime();
 		final String oldPickup = this.taxi.getPickupTime();
 		float oldFare = 0;
-		if(this.taxi != null)
+		if (this.taxi != null)
 		{
 			oldFare = this.taxi.getPredictedCost();
 		}
@@ -85,7 +84,7 @@ public class TaxiAdminPanel extends Composite
 		taxiID.setText("TAXI" + taxi.getId());
 		destination.setText(taxi.getDestination().getName());
 		status.setText(taxi.getStatus());
-		if(taxi.getCompany() != null)
+		if (taxi.getCompany() != null)
 		{
 			company.setText(taxi.getCompany().getName());
 		}
@@ -94,11 +93,11 @@ public class TaxiAdminPanel extends Composite
 			company.setText("None");
 		}
 
-		if(oldFare != taxi.getPredictedCost())
+		if (oldFare != taxi.getPredictedCost())
 		{
-			fare.setText("" + taxi.getPredictedCost());			
+			fare.setText("" + taxi.getPredictedCost());
 		}
-		
+
 		// TODO if day != today print full day
 		if (taxi.getArrivalTime() != null && (oldArrival == null || !oldArrival.equals(taxi.getArrivalTime())))
 		{
@@ -120,10 +119,24 @@ public class TaxiAdminPanel extends Composite
 		service.setTime(taxi.getId(), arrival.getText(), "arrival");
 	}
 
+	@UiHandler("company")
+	void handleCompanyClick(final ClickEvent e)
+	{
+		statusSelect.setTaxi(taxi.getId(), service);
+		statusSelect.setPopupPosition(e.getClientX(), e.getClientY());
+		statusSelect.show();
+	}
+
 	@UiHandler("fare")
 	void handleFareChange(final ChangeEvent e)
 	{
 		service.setFare(taxi.getId(), fare.getText());
+	}
+
+	@UiHandler("pickup")
+	void handlePickupChange(final ChangeEvent e)
+	{
+		service.setTime(taxi.getId(), pickup.getText(), "pickup");
 	}
 
 	@UiHandler("status")
@@ -132,19 +145,5 @@ public class TaxiAdminPanel extends Composite
 		statusSelect.setTaxi(taxi.getId(), service);
 		statusSelect.setPopupPosition(e.getX(), e.getY());
 		statusSelect.show();
-	}
-	
-	@UiHandler("company")
-	void handleCompanyClick(final ClickEvent e)
-	{
-		statusSelect.setTaxi(taxi.getId(), service);
-		statusSelect.setPopupPosition(e.getClientX(), e.getClientY());
-		statusSelect.show();
-	}	
-	
-	@UiHandler("pickup")
-	void handlePickupChange(final ChangeEvent e)
-	{
-		service.setTime(taxi.getId(), pickup.getText(), "pickup");
 	}
 }

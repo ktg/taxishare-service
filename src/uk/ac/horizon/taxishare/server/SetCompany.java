@@ -30,16 +30,16 @@ public class SetCompany extends HttpServlet
 			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
 			final EntityManager entityManager = factory.createEntityManager();
 
-			int taxiID = Integer.parseInt(request.getParameter("taxiID"));
-			String status = request.getParameter("status").toLowerCase();
-			
-			Taxi taxi = entityManager.find(Taxi.class, taxiID);
+			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
+			final String status = request.getParameter("status").toLowerCase();
+
+			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
 			taxi.setStatus(Status.valueOf(status));
-			
+
 			entityManager.getTransaction().begin();
 			entityManager.merge(taxi);
 			entityManager.getTransaction().commit();
-			entityManager.close();	
+			entityManager.close();
 		}
 		catch (final Exception e)
 		{

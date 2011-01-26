@@ -4,7 +4,9 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class TaxiCompany extends JavaScriptObject
 {
-	protected TaxiCompany() { }
+	protected TaxiCompany()
+	{
+	}
 
 	public native final int getId() /*-{ return this.id; }-*/;
 
