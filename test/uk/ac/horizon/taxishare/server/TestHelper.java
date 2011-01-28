@@ -1,16 +1,20 @@
 package uk.ac.horizon.taxishare.server;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-import uk.ac.horizon.taxishare.model.Location;
-import uk.ac.horizon.taxishare.model.Instance;
-import uk.ac.horizon.taxishare.model.Person;
-import uk.ac.horizon.taxishare.model.Taxi;
-import uk.ac.horizon.taxishare.model.TaxiCompany;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
+
+import uk.ac.horizon.taxishare.server.model.Instance;
+import uk.ac.horizon.taxishare.server.model.Location;
+import uk.ac.horizon.taxishare.server.model.Person;
+import uk.ac.horizon.taxishare.server.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.TaxiCompany;
 
 public class TestHelper
 {
@@ -44,7 +48,10 @@ public class TestHelper
 	{
 		if (!setup)
 		{
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare-reset");
+			final Map<String, String> persistProperties = new HashMap<String, String>();
+			persistProperties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.DROP_AND_CREATE);
+			
+			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare", persistProperties);
 			entityManager = factory.createEntityManager();
 			destination = new Location("Home", "NG9 2WB");
 			source = new Location("EMCC", "NG7 2RJ");

@@ -1,10 +1,11 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
 import org.adamtacy.client.ui.effects.events.EffectCompletedHandler;
@@ -13,9 +14,10 @@ import org.adamtacy.client.ui.effects.impl.Highlight;
 import org.adamtacy.client.ui.effects.impl.NShow;
 import org.adamtacy.client.ui.effects.impl.SlideLeft;
 
-import bzb.gwt.taxishare.client.model.Destination;
-import bzb.gwt.taxishare.client.model.Instance;
-import bzb.gwt.taxishare.client.model.Taxi;
+import uk.ac.horizon.taxishare.client.model.Destination;
+import uk.ac.horizon.taxishare.client.model.Instance;
+import uk.ac.horizon.taxishare.client.model.Taxi;
+
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -58,7 +60,7 @@ public class TaxiShareUI implements EntryPoint
 
 	private static final Image busyIcon = new Image("busy.gif");
 
-	private static ArrayList<ArrayList<TaxiPanel>> pages = new ArrayList<ArrayList<TaxiPanel>>();
+	private static List<List<TaxiPanel>> pages = new ArrayList<List<TaxiPanel>>();
 
 	private static MapPanel mp = new MapPanel();
 	private static VerticalPanel vPanel = new VerticalPanel();
@@ -190,14 +192,17 @@ public class TaxiShareUI implements EntryPoint
 					currPage++;
 				}
 
-				final TaxiPanel p = new TaxiPanel(taxis.get(i));
-				if (pages.size() <= currPage)
+				if(!taxis.get(i).getStatus().equals("left"))
 				{
-					pages.add(currPage, new ArrayList<TaxiPanel>());
-				}
-				p.setHeight(ph + "px");
-				pages.get(currPage).add(p);
-				heightRemaining -= ph;
+					final TaxiPanel p = new TaxiPanel(taxis.get(i));
+					if (pages.size() <= currPage)
+					{
+						pages.add(currPage, new ArrayList<TaxiPanel>());
+					}
+					p.setHeight(ph + "px");
+					pages.get(currPage).add(p);
+					heightRemaining -= ph;
+					}
 			}
 			mp.addRoutes(instance.getLocation(), instance.getTaxis());
 
@@ -286,10 +291,9 @@ public class TaxiShareUI implements EntryPoint
 				}
 				else if (pageNum < pages.size())
 				{
-					final Iterator<TaxiPanel> it = pages.get(pageNum).iterator();
-					while (it.hasNext())
+					for (TaxiPanel panel: pages.get(pageNum))
 					{
-						vPanel.add(it.next());
+						vPanel.add(panel);
 					}
 				}
 				else

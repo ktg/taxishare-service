@@ -1,4 +1,4 @@
-package bzb.gwt.taxishare.client.model;
+package uk.ac.horizon.taxishare.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
@@ -10,6 +10,8 @@ public class Instance extends JavaScriptObject
 	}
 
 	public final native JsArray<Destination> getDestinations() /*-{ return this.destinations; }-*/;
+	
+	public final native JsArray<TaxiCompany> getCompanies() /*-{ return this.companies; }-*/;	
 
 	public final native int getId() /*-{ return this.id; }-*/;
 

@@ -1,3 +1,6 @@
-#Wed Jan 26 10:40:03 GMT 2011
+#Wed Jan 26 11:54:44 GMT 2011
 eclipse.preferences.version=1
 jarsExcludedFromWebInfLib=D\:/ktg/workspace/taxishare-service/lib/GWT FX v0.5.0 MS 1.jar|D\:/ktg/workspace/taxishare-service/lib/gwt-maps.jar
+launchConfigExternalUrlPrefix=
+warSrcDir=war
+warSrcDirIsOutput=true

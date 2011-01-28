@@ -1,17 +1,15 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
-import bzb.gwt.taxishare.client.model.Taxi;
+import uk.ac.horizon.taxishare.client.model.Taxi;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TaxiPanel extends HorizontalPanel
@@ -22,24 +20,24 @@ public class TaxiPanel extends HorizontalPanel
 	{
 		setWidth((Window.getClientWidth() - 40) + "px");
 
-		final DockPanel idPanel = new DockPanel();
+		final SimplePanel idPanel = new SimplePanel();
 		final Label idLabel = new Label("TAXI" + String.valueOf(taxi.getId()));
 		idLabel.addStyleName("idLabel");
-		idPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		idPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		idPanel.add(idLabel, DockPanel.CENTER);
+		//idPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		//idPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		idPanel.add(idLabel);
 
 		final int spaceLeft = taxi.getTotalSpace() - taxi.getPeople().length();
 
 		Panel spacesPanel;
 		if (spaceLeft == 0)
 		{
-			spacesPanel = new DockPanel();
-			((DockPanel) spacesPanel).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			((DockPanel) spacesPanel).setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			spacesPanel = new SimplePanel();
+			//((DockPanel) spacesPanel).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			//((DockPanel) spacesPanel).setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 			final Label fullLabel = new Label("FULL");
 			fullLabel.addStyleName("idLabel");
-			((DockPanel) spacesPanel).add(fullLabel, DockPanel.CENTER);
+			spacesPanel.add(fullLabel);
 		}
 		else
 		{
@@ -75,12 +73,12 @@ public class TaxiPanel extends HorizontalPanel
 			spacesPanel.add(spacesIcons);
 		}
 
-		final DockPanel destinationPanel = new DockPanel();
+		final SimplePanel destinationPanel = new SimplePanel();
 		final Label destinationLabel = new Label(taxi.getDestination().getName());
 		destinationLabel.addStyleName("destinationNameLabel");
-		destinationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		destinationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		destinationPanel.add(destinationLabel, DockPanel.CENTER);
+		//destinationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		//destinationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		destinationPanel.add(destinationLabel);
 
 		final VerticalPanel timePanel = new VerticalPanel();
 		timePanel.add(new Label("Pickup:"));

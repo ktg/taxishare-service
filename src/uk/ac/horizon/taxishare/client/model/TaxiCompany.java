@@ -1,10 +1,10 @@
-package bzb.gwt.taxishare.client.model;
+package uk.ac.horizon.taxishare.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class Destination extends JavaScriptObject
+public class TaxiCompany extends JavaScriptObject
 {
-	protected Destination()
+	protected TaxiCompany()
 	{
 	}
 
@@ -12,5 +12,5 @@ public class Destination extends JavaScriptObject
 
 	public native final String getName() /*-{ return this.name; }-*/;
 
-	public native final String getPostcode() /*-{ return this.postcode; }-*/;
+	public native final String getNumber() /*-{ return this.number; }-*/;
 }

@@ -7,10 +7,10 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import uk.ac.horizon.taxishare.model.Instance;
-import uk.ac.horizon.taxishare.model.Location;
-import uk.ac.horizon.taxishare.model.Person;
-import uk.ac.horizon.taxishare.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.Instance;
+import uk.ac.horizon.taxishare.server.model.Location;
+import uk.ac.horizon.taxishare.server.model.Person;
+import uk.ac.horizon.taxishare.server.model.Taxi;
 
 public class Server
 {

@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.model;
+package uk.ac.horizon.taxishare.server.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +26,8 @@ public class Instance
 	private Collection<Location> destinations = new ArrayList<Location>();
 	@OneToMany(mappedBy = "instance")
 	private Collection<Taxi> taxis = new ArrayList<Taxi>();
+	
+	private Collection<TaxiCompany> companies = new ArrayList<TaxiCompany>();
 	private boolean enabled = true;
 
 	@NotNull
@@ -46,11 +48,21 @@ public class Instance
 		taxis.add(taxi);
 	}
 
+	public void add(final TaxiCompany taxiCompany)
+	{
+		companies.add(taxiCompany);
+	}
+	
 	public Iterable<Location> getDestinations()
 	{
 		return destinations;
 	}
 
+	public Iterable<TaxiCompany> getCompanies()
+	{
+		return companies;
+	}
+	
 	public boolean getEnabled()
 	{
 		return enabled;

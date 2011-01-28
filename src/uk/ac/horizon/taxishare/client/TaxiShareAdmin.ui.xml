@@ -1,0 +1,34 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.main {
+			position: absolute !important;
+			left: 0px;
+			right: 0px;
+			top: 0px;
+			bottom: 0px;
+		}
+		
+		.clickable {
+			cursor: pointer;
+		}
+	</ui:style>
+	<g:DockLayoutPanel styleName="{style.main}">
+		<g:center>
+			<g:FlowPanel ui:field="taxis" />
+		</g:center>
+		<g:east size="200">
+			<g:FlowPanel>
+				<g:FlowPanel>
+					<g:Label>Companies</g:Label>
+					<g:FlowPanel ui:field="companies" />
+				</g:FlowPanel>
+				<g:FlowPanel>
+					<g:Label>Locations</g:Label>
+					<g:FlowPanel ui:field="locations" />
+				</g:FlowPanel>
+			</g:FlowPanel>
+		</g:east>
+	</g:DockLayoutPanel>
+</ui:UiBinder> 

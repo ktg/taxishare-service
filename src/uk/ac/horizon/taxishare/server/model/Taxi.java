@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.model;
+package uk.ac.horizon.taxishare.server.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

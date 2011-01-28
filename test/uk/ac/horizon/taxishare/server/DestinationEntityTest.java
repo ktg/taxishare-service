@@ -7,7 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.ac.horizon.taxishare.model.Location;
+import uk.ac.horizon.taxishare.server.model.Location;
 
 public class DestinationEntityTest
 {

@@ -17,12 +17,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 
-import uk.ac.horizon.taxishare.model.Instance;
-import uk.ac.horizon.taxishare.model.Location;
-import uk.ac.horizon.taxishare.model.Person;
-import uk.ac.horizon.taxishare.model.Taxi;
-import uk.ac.horizon.taxishare.model.Taxi.Status;
-import uk.ac.horizon.taxishare.model.TaxiCompany;
+import uk.ac.horizon.taxishare.server.model.Instance;
+import uk.ac.horizon.taxishare.server.model.Location;
+import uk.ac.horizon.taxishare.server.model.Person;
+import uk.ac.horizon.taxishare.server.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.TaxiCompany;
+import uk.ac.horizon.taxishare.server.model.Taxi.Status;
 
 public class Reset extends HttpServlet
 {
@@ -73,6 +73,8 @@ public class Reset extends HttpServlet
 			instance.add(destination);
 			instance.add(destination2);
 			instance.add(destination3);
+			
+			instance.add(taxiCompany);
 
 			entityManager.getTransaction().begin();
 			entityManager.persist(taxiCompany);

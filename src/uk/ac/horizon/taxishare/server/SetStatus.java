@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import uk.ac.horizon.taxishare.model.Taxi;
-import uk.ac.horizon.taxishare.model.Taxi.Status;
+import uk.ac.horizon.taxishare.server.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.Taxi.Status;
 
 public class SetStatus extends HttpServlet
 {

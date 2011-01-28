@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.model;
+package uk.ac.horizon.taxishare.server.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

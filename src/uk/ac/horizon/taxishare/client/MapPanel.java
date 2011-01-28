@@ -1,10 +1,11 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import bzb.gwt.taxishare.client.model.Destination;
-import bzb.gwt.taxishare.client.model.Taxi;
+import uk.ac.horizon.taxishare.client.model.Destination;
+import uk.ac.horizon.taxishare.client.model.Taxi;
+
 
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.maps.client.MapWidget;

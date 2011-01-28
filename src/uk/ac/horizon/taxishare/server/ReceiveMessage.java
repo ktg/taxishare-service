@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import uk.ac.horizon.taxishare.model.Instance;
-import uk.ac.horizon.taxishare.model.Message;
+import uk.ac.horizon.taxishare.server.model.Instance;
+import uk.ac.horizon.taxishare.server.model.Message;
 
 /**
  * Servlet to recieve a text message from Esendex.

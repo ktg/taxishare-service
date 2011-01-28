@@ -1,4 +1,4 @@
-package bzb.gwt.taxishare.client.model;
+package uk.ac.horizon.taxishare.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
 

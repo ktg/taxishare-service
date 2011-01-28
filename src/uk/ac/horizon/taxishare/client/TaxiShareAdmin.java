@@ -1,24 +1,44 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import bzb.gwt.taxishare.client.model.Instance;
-import bzb.gwt.taxishare.client.model.Taxi;
+import uk.ac.horizon.taxishare.client.model.Instance;
+import uk.ac.horizon.taxishare.client.model.Taxi;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
-public class TaxiShareAdmin extends FlowPanel
+public class TaxiShareAdmin extends Composite
 {
+	interface TaxiShareAdminUiBinder extends UiBinder<Widget, TaxiShareAdmin>
+	{
+	}
+
+	private static TaxiShareAdminUiBinder uiBinder = GWT.create(TaxiShareAdminUiBinder.class);
+	
 	private static final native Instance parseJSONResponse(String json)
 	/*-{
 		return eval('(' + json + ')');
 	}-*/;
+
+	@UiField
+	FlowPanel companies;
+
+	@UiField
+	FlowPanel locations;
+
+	@UiField
+	FlowPanel taxis;
 
 	private final TaxiShareService service;
 
@@ -29,6 +49,7 @@ public class TaxiShareAdmin extends FlowPanel
 	public TaxiShareAdmin(final TaxiShareService service)
 	{
 		this.service = service;
+		initWidget(uiBinder.createAndBindUi(this));		
 
 		final Timer requestTimer = new Timer()
 		{
@@ -87,10 +108,22 @@ public class TaxiShareAdmin extends FlowPanel
 				if (panel == null)
 				{
 					panel = new TaxiAdminPanel(taxi, service);
-					add(panel);
+					taxis.add(panel);
 					panels.put(taxiID, panel);
 				}
 				panel.update(taxi);
+			}
+			
+			locations.clear();
+			for(int index = 0; index < instance.getDestinations().length(); index++)
+			{
+				locations.add(new Label(instance.getDestinations().get(index).getName() + " " + instance.getDestinations().get(index).getPostcode()));
+			}
+			
+			companies.clear();
+			for(int index = 0; index < instance.getCompanies().length(); index++)
+			{
+				companies.add(new Label(instance.getCompanies().get(index).getName() + ": " + instance.getCompanies().get(index).getNumber()));
 			}
 
 		}

@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.ac.horizon.taxishare.model.Person;
-import uk.ac.horizon.taxishare.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.Person;
+import uk.ac.horizon.taxishare.server.model.Taxi;
 
 public class TaxiEntityTest
 {
@@ -39,8 +39,8 @@ public class TaxiEntityTest
 		taxi = entityManager.find(Taxi.class, TestHelper.getTaxiID());
 		taxi.remove(person);
 		entityManager.getTransaction().begin();
-		entityManager.remove(person);
 		entityManager.merge(taxi);
+		entityManager.remove(person);		
 		entityManager.getTransaction().commit();
 	}
 

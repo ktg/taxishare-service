@@ -14,13 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import uk.ac.horizon.taxishare.model.Instance;
+import uk.ac.horizon.taxishare.server.model.Instance;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * Servlet that returns an {@link uk.ac.horizon.taxishare.model.Instance} as JSON. If no instance id
+ * Servlet that returns an {@link uk.ac.horizon.taxishare.server.model.Instance} as JSON. If no instance id
  * is given, it will return a single enabled instance.
  * 
  * @author Kevin Glover

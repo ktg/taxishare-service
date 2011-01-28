@@ -1,8 +1,9 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
 import java.util.Date;
 
-import bzb.gwt.taxishare.client.model.Taxi;
+import uk.ac.horizon.taxishare.client.model.Taxi;
+
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -83,6 +84,7 @@ public class TaxiAdminPanel extends Composite
 
 		taxiID.setText("TAXI" + taxi.getId());
 		destination.setText(taxi.getDestination().getName());
+		destination.setTitle(taxi.getDestination().getPostcode());
 		status.setText(taxi.getStatus());
 		if (taxi.getCompany() != null)
 		{

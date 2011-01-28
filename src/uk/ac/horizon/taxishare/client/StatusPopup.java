@@ -1,4 +1,4 @@
-package bzb.gwt.taxishare.client;
+package uk.ac.horizon.taxishare.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;

@@ -1,7 +1,8 @@
-html {
+html
+{
 	overflow-x: hidden;
 	overflow-y: hidden;
-	}
+}
 
 .background {
 	background: -webkit-gradient(linear, left top, right bottom, from(rgb(20,81,153)), to(rgb(66,127,200)));
@@ -178,7 +179,12 @@ html {
 	font-family: arial black;
 	}
 
+.idLabel, .destinationNameLabel {
+		padding-top: 20px;
+}
+
 .spaceLeftLabel, .idLabel, .destinationNameLabel, .fareLabel {
+
 	font-family: arial black;
 	letter-spacing: -3pt;
 	font-size: 30pt;
