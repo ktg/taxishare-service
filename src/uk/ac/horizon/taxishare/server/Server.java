@@ -1,5 +1,11 @@
 package uk.ac.horizon.taxishare.server;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +20,12 @@ import uk.ac.horizon.taxishare.server.model.Taxi;
 
 public class Server
 {
-	private final static Logger logger = Logger.getLogger(Server.class.getName());
+	private static final Logger logger = Logger.getLogger(Server.class.getName());
+	
+	private static final String textURL = "";
+	private static final String EsendexUsername = "";
+	private static final String EsendexPassword = "";
+	private static final String EsendexAccount = "";
 
 	public static boolean canAdd(final Taxi taxi)
 	{
@@ -213,6 +224,41 @@ public class Server
 			entityManager.merge(person);
 			entityManager.merge(taxi);
 			entityManager.getTransaction().commit();
+		}
+	}
+	
+	public static void sendMessage(final Person person, final String message)
+	{
+		logger.info("Send text to " + person.getName() + " (" + person.getNumber() + "): \"" + message + "\"");
+		
+	    try
+		{
+			String data = URLEncoder.encode("Username", "UTF-8") + "=" + URLEncoder.encode(EsendexUsername, "UTF-8");
+			data += "&" + URLEncoder.encode("Password", "UTF-8") + "=" + URLEncoder.encode(EsendexPassword, "UTF-8");
+			data += "&" + URLEncoder.encode("Account", "UTF-8") + "=" + URLEncoder.encode(EsendexAccount, "UTF-8");
+			data += "&" + URLEncoder.encode("Recipient", "UTF-8") + "=" + URLEncoder.encode(person.getNumber(), "UTF-8");			
+			data += "&" + URLEncoder.encode("Body", "UTF-8") + "=" + URLEncoder.encode(message, "UTF-8");			
+
+			// Send data
+			URL url = new URL(textURL);
+			URLConnection conn = url.openConnection();
+			conn.setDoOutput(true);
+			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+			wr.write(data);
+			wr.flush();
+
+			// Get the response
+			BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			String line;
+			while ((line = rd.readLine()) != null) {
+			    logger.info(line);
+			}
+			wr.close();
+			rd.close();
+		}
+		catch (Exception e)
+		{
+			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
 	}
 }

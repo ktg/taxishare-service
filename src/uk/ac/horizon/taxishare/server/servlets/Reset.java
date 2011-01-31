@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.server;
+package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
 import java.util.Date;

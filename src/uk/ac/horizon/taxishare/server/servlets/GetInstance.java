@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.server;
+package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import uk.ac.horizon.taxishare.server.ManyToOneExclusionStrategy;
 import uk.ac.horizon.taxishare.server.model.Instance;
 
 import com.google.gson.Gson;

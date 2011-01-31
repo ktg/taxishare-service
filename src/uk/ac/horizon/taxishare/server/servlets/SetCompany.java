@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.server;
+package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -12,29 +12,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RequestTaxi extends HttpServlet
+import uk.ac.horizon.taxishare.server.model.Taxi;
+import uk.ac.horizon.taxishare.server.model.Taxi.Status;
+
+public class SetCompany extends HttpServlet
 {
-	private final static Logger logger = Logger.getLogger(RequestTaxi.class.getName());
+	private final static Logger logger = Logger.getLogger(SetCompany.class.getName());
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
 			IOException
 	{
-		response.setContentType("application/json");
 		logger.info(request.getRequestURL().toString());
 
 		try
 		{
 			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
 			final EntityManager entityManager = factory.createEntityManager();
-			final String instance = request.getParameter("instance");
 
-			Server.requestTaxi(	entityManager, Integer.parseInt(instance), request.getParameter("name"),
-								request.getParameter("number"), request.getParameter("destination"), 1, null);
+			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
+			final String status = request.getParameter("status").toLowerCase();
+
+			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
+			taxi.setStatus(Status.valueOf(status));
+
+			entityManager.getTransaction().begin();
+			entityManager.merge(taxi);
+			entityManager.getTransaction().commit();
+			entityManager.close();
 		}
 		catch (final Exception e)
 		{
 			logger.log(Level.WARNING, e.getMessage(), e);
+			e.printStackTrace(response.getWriter());
 		}
 	}
 }

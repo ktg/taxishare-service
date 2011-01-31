@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app id="taxishare-service" version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app id="taxishare-service" version="2.5"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<servlet>
-		<servlet-name>getInstance</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.GetInstance</servlet-class>
+		<servlet-name>getInstance</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.GetInstance</servlet-class>
 	</servlet>
 
 	<servlet>
-		<servlet-name>reset</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.Reset</servlet-class>
+		<servlet-name>reset</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.Reset</servlet-class>
 	</servlet>
 
 	<servlet>
-		<servlet-name>receiveMessage</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.ReceiveMessage</servlet-class>
+		<servlet-name>receiveMessage</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.ReceiveMessage</servlet-class>
 	</servlet>
 
 	<servlet>
-		<servlet-name>setTime</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.SetTime</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>setFare</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.SetFare</servlet-class>
+		<servlet-name>setTime</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.SetTime</servlet-class>
 	</servlet>
 
 	<servlet>
-		<servlet-name>setStatus</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.SetStatus</servlet-class>
+		<servlet-name>setFare</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.SetFare</servlet-class>
 	</servlet>
 
 	<servlet>
-		<servlet-name>setCompany</servlet-name>		
-		<servlet-class>uk.ac.horizon.taxishare.server.SetCompany</servlet-class>
+		<servlet-name>setStatus</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.SetStatus</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>setCompany</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.SetCompany</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -48,7 +49,7 @@
 	<servlet-mapping>
 		<servlet-name>setTime</servlet-name>
 		<url-pattern>/setTime</url-pattern>
-	</servlet-mapping>	
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>setFare</servlet-name>
@@ -69,7 +70,7 @@
 		<servlet-name>getInstance</servlet-name>
 		<url-pattern>/getInstance</url-pattern>
 	</servlet-mapping>
-	
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

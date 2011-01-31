@@ -1,4 +1,4 @@
-package uk.ac.horizon.taxishare.server;
+package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import uk.ac.horizon.taxishare.server.Server;
 import uk.ac.horizon.taxishare.server.model.Instance;
 import uk.ac.horizon.taxishare.server.model.Message;
 
