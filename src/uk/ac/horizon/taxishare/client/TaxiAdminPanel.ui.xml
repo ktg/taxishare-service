@@ -15,6 +15,7 @@
 		<g:Label ui:field="destination" />
 		<g:Label addStyleNames="{style.clickable}" ui:field="status" />
 		</td>
+		<td><g:FlowPanel ui:field="people" /></td>		
 		<td>
 		<g:Label ui:field="company" />		
 		</td>

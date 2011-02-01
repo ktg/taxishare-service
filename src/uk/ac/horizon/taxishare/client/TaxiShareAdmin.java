@@ -107,7 +107,7 @@ public class TaxiShareAdmin extends Composite
 				TaxiAdminPanel panel = panels.get(taxiID);
 				if (panel == null)
 				{
-					panel = new TaxiAdminPanel(taxi, service);
+					panel = new TaxiAdminPanel(instance, taxi, service);
 					taxis.add(panel);
 					panels.put(taxiID, panel);
 				}

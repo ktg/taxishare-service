@@ -1,6 +1,7 @@
 package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +37,15 @@ public class SetStatus extends HttpServlet
 			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
 			taxi.setStatus(Status.valueOf(status));
 
+			if(taxi.getStatus() == Status.arrived || taxi.getStatus() == Status.cancelled)
+			{
+				Date old = taxi.getPickupTime();
+				Date now = new Date();
+				
+				taxi.setPickupTime(now);
+				taxi.setArrivalTime(new Date(taxi.getArrivalTime().getTime() + (now.getTime() - old.getTime())));
+			}
+			
 			entityManager.getTransaction().begin();
 			entityManager.merge(taxi);
 			entityManager.getTransaction().commit();

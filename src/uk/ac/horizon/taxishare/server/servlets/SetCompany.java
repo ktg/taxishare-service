@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import uk.ac.horizon.taxishare.server.model.Taxi;
-import uk.ac.horizon.taxishare.server.model.Taxi.Status;
+import uk.ac.horizon.taxishare.server.model.TaxiCompany;
 
 public class SetCompany extends HttpServlet
 {
@@ -31,10 +31,11 @@ public class SetCompany extends HttpServlet
 			final EntityManager entityManager = factory.createEntityManager();
 
 			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
-			final String status = request.getParameter("status").toLowerCase();
+			final int taxiCompanyID = Integer.parseInt(request.getParameter("taxiCompanyID"));
 
 			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
-			taxi.setStatus(Status.valueOf(status));
+			final TaxiCompany taxiCo = entityManager.find(TaxiCompany.class, taxiCompanyID);
+			taxi.setCompany(taxiCo);
 
 			entityManager.getTransaction().begin();
 			entityManager.merge(taxi);

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.adamtacy.client.ui.effects.events.EffectCompletedEvent;
@@ -17,7 +16,6 @@ import org.adamtacy.client.ui.effects.impl.SlideLeft;
 import uk.ac.horizon.taxishare.client.model.Destination;
 import uk.ac.horizon.taxishare.client.model.Instance;
 import uk.ac.horizon.taxishare.client.model.Taxi;
-
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -62,7 +60,7 @@ public class TaxiShareUI implements EntryPoint
 
 	private static List<List<TaxiPanel>> pages = new ArrayList<List<TaxiPanel>>();
 
-	private static MapPanel mp = new MapPanel();
+	// private static MapPanel mp = new MapPanel();
 	private static VerticalPanel vPanel = new VerticalPanel();
 	private static HorizontalPanel hPanel = new HorizontalPanel();
 	private static DockPanel ivPanel = new DockPanel();
@@ -102,7 +100,7 @@ public class TaxiShareUI implements EntryPoint
 
 	private static void loadCurrentPage()
 	{
-		pageLabel.setText("Page " + (pageNum + 1) + "/" + (pages.size() + 1));
+		pageLabel.setText("Page " + (pageNum + 1) + "/" + (pages.size()));
 		countdownTimer.schedule(PAGE_TIMEOUT - TIMEOUT_INDICATOR);
 		fPage.play();
 		if (pageNum == 0)
@@ -186,25 +184,34 @@ public class TaxiShareUI implements EntryPoint
 			final JsArray<Taxi> taxis = instance.getTaxis();
 			for (int i = 0; i < taxis.length(); i++)
 			{
+				final Taxi taxi = taxis.get(i);
+
+				if (taxi.getStatus().equals("left"))
+				{
+					final Date pickup = Taxi.dateFormat.parse(taxi.getPickupTime());
+					if ((new Date().getTime() - pickup.getTime()) > (PAGE_TIMEOUT * 3))
+					{
+						continue;
+					}
+				}
+
 				if (heightRemaining < 0)
 				{
 					heightRemaining = heightToFill;
 					currPage++;
 				}
 
-				if(!taxis.get(i).getStatus().equals("left"))
+				final TaxiPanel p = new TaxiPanel(taxi);
+				if (pages.size() <= currPage)
 				{
-					final TaxiPanel p = new TaxiPanel(taxis.get(i));
-					if (pages.size() <= currPage)
-					{
-						pages.add(currPage, new ArrayList<TaxiPanel>());
-					}
-					p.setHeight(ph + "px");
-					pages.get(currPage).add(p);
-					heightRemaining -= ph;
-					}
+					pages.add(currPage, new ArrayList<TaxiPanel>());
+				}
+				p.setHeight(ph + "px");
+				pages.get(currPage).add(p);
+				heightRemaining -= ph;
+
 			}
-			mp.addRoutes(instance.getLocation(), instance.getTaxis());
+			// mp.addRoutes(instance.getLocation(), instance.getTaxis());
 
 			final JsArray<Destination> newDests = instance.getDestinations();
 			for (int index = 0; index < newDests.length(); index++)
@@ -291,15 +298,15 @@ public class TaxiShareUI implements EntryPoint
 				}
 				else if (pageNum < pages.size())
 				{
-					for (TaxiPanel panel: pages.get(pageNum))
+					for (final TaxiPanel panel : pages.get(pageNum))
 					{
 						vPanel.add(panel);
 					}
 				}
 				else
 				{
-					mp.zoom();
-					vPanel.add(mp);
+					// mp.zoom();
+					// vPanel.add(mp);
 					mf.play();
 				}
 
@@ -336,7 +343,7 @@ public class TaxiShareUI implements EntryPoint
 				public void run()
 				{
 					pageNum++;
-					if (pageNum > pages.size())
+					if (pageNum >= pages.size())
 					{
 						pageNum = 0;
 					}

@@ -2,12 +2,15 @@ package uk.ac.horizon.taxishare.client.model;
 
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class Taxi extends JavaScriptObject
 {
+	public static final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MMM-yyyy HH:mm:ss");
+	
 	public enum Status
 	{
-		unconfirmed, confirmed, arriving, arrived, left, cancel
+		unconfirmed, confirmed, arriving, arrived, left, cancelled
 	}
 
 	protected Taxi()

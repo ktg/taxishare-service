@@ -6,7 +6,7 @@ public interface TaxiShareService
 {
 	public void getInstance(final RequestCallback callback);
 
-	public void setCompany(int taxiID, String taxiCompanyID);
+	public void setCompany(int taxiID, int taxiCompanyID);
 
 	public void setFare(int taxiID, String text);
 

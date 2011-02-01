@@ -1,8 +1,6 @@
 package uk.ac.horizon.taxishare.server.servlets;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,14 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import uk.ac.horizon.taxishare.server.Server;
 import uk.ac.horizon.taxishare.server.model.Taxi;
 
 public class SetTime extends HttpServlet
 {
 	private final static Logger logger = Logger.getLogger(SetTime.class.getName());
-
-	SimpleDateFormat timeFormat1 = new SimpleDateFormat("hh:mm aa");
-	SimpleDateFormat timeFormat2 = new SimpleDateFormat("HH:mm");
 
 	@Override
 	protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
@@ -40,49 +36,22 @@ public class SetTime extends HttpServlet
 			logger.info(request.getRequestURI().toString() + "Type: " + type + ", taxi: " + taxiID + ", time: "
 					+ timeString);
 
-			Date parsed = null;
-			try
-			{
-				parsed = timeFormat1.parse(timeString);
-			}
-			catch (final Exception e)
-			{
-				logger.log(Level.WARNING, e.getMessage(), e);
-			}
-			if (parsed == null)
-			{
-				try
-				{
-					parsed = timeFormat2.parse(timeString);
-				}
-				catch (final Exception e)
-				{
-					logger.log(Level.WARNING, e.getMessage(), e);
-				}
-			}
+			final Date parsed = Server.parseTime(timeString);
 
 			final Taxi taxi = entityManager.find(Taxi.class, taxiID);
 			if (parsed != null)
 			{
-				final Calendar parsedTime = Calendar.getInstance();
-				parsedTime.setTime(parsed);
-
-				final Calendar cal = Calendar.getInstance();
-				cal.set(Calendar.HOUR_OF_DAY, parsedTime.get(Calendar.HOUR_OF_DAY));
-				cal.set(Calendar.MINUTE, parsedTime.get(Calendar.MINUTE));
-				cal.set(Calendar.SECOND, 0);
-				cal.set(Calendar.MILLISECOND, 0);
 				if (type.equals("arrival"))
 				{
-					taxi.setArrivalTime(cal.getTime());
+					taxi.setArrivalTime(parsed);
 				}
 				else if (type.equals("pickup"))
 				{
-					taxi.setPickupTime(cal.getTime());
+					taxi.setPickupTime(parsed);
 				}
 				else if (type.equals("request"))
 				{
-					taxi.setRequestTime(cal.getTime());
+					taxi.setRequestTime(parsed);
 				}
 			}
 			else if (timeString == null || timeString.isEmpty())

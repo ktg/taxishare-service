@@ -35,7 +35,7 @@ public class TaxiShareServiceImpl implements TaxiShareService
 	}
 
 	@Override
-	public void setCompany(final int taxiID, final String taxiCompanyID)
+	public void setCompany(final int taxiID, final int taxiCompanyID)
 	{
 		serverRequest(getHostURL() + "setCompany?taxiID=" + taxiID + "&taxiCompanyID=" + taxiCompanyID, defaultCallback);
 	}

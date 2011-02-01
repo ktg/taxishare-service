@@ -20,7 +20,7 @@ public class Taxi
 {
 	public enum Status
 	{
-		unconfirmed, confirmed, arriving, arrived, left
+		unconfirmed, confirmed, arriving, arrived, left, cancelled
 	}
 
 	@Id

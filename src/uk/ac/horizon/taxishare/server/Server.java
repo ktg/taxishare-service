@@ -6,6 +6,8 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +23,8 @@ import uk.ac.horizon.taxishare.server.model.Taxi;
 public class Server
 {
 	private static final Logger logger = Logger.getLogger(Server.class.getName());
+	
+	private final static SimpleDateFormat[] timeFormats = new SimpleDateFormat[] { new SimpleDateFormat("h:mma"), new SimpleDateFormat("H:mm"), new SimpleDateFormat("ha"), new SimpleDateFormat("H")};
 	
 	private static final String textURL = "";
 	private static final String EsendexUsername = "";
@@ -260,5 +264,40 @@ public class Server
 		{
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
+	}
+	
+	public static Date parseTime(final String time)
+	{
+		Date parsed = null;
+		String timeString = time.trim().toUpperCase().replaceAll(" ", "");
+		
+		for(SimpleDateFormat timeFormat: timeFormats)
+		{
+				
+			try
+			{
+				parsed = timeFormat.parse(timeString);
+				if(parsed != null)
+				{
+					final Calendar parsedTime = Calendar.getInstance();
+					parsedTime.setTime(parsed);
+
+					final Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.HOUR_OF_DAY, parsedTime.get(Calendar.HOUR_OF_DAY));
+					cal.set(Calendar.MINUTE, parsedTime.get(Calendar.MINUTE));
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
+					
+					return cal.getTime();
+				}
+			}
+			catch(final Exception e)
+			{				
+			}
+		}
+		
+		logger.warning("Couldn't parse time: " + time);
+
+		return null;
 	}
 }

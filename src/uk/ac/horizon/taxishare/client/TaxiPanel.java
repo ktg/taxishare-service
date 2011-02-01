@@ -14,8 +14,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TaxiPanel extends HorizontalPanel
 {
-	private static final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MMM-yyyy HH:mm:ss");
-
 	public TaxiPanel(final Taxi taxi)
 	{
 		setWidth((Window.getClientWidth() - 40) + "px");
@@ -23,8 +21,8 @@ public class TaxiPanel extends HorizontalPanel
 		final SimplePanel idPanel = new SimplePanel();
 		final Label idLabel = new Label("TAXI" + String.valueOf(taxi.getId()));
 		idLabel.addStyleName("idLabel");
-		//idPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		//idPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		// idPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		// idPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		idPanel.add(idLabel);
 
 		final int spaceLeft = taxi.getTotalSpace() - taxi.getPeople().length();
@@ -33,8 +31,9 @@ public class TaxiPanel extends HorizontalPanel
 		if (spaceLeft == 0)
 		{
 			spacesPanel = new SimplePanel();
-			//((DockPanel) spacesPanel).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			//((DockPanel) spacesPanel).setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+			// ((DockPanel)
+			// spacesPanel).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+			// ((DockPanel) spacesPanel).setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 			final Label fullLabel = new Label("FULL");
 			fullLabel.addStyleName("idLabel");
 			spacesPanel.add(fullLabel);
@@ -76,8 +75,8 @@ public class TaxiPanel extends HorizontalPanel
 		final SimplePanel destinationPanel = new SimplePanel();
 		final Label destinationLabel = new Label(taxi.getDestination().getName());
 		destinationLabel.addStyleName("destinationNameLabel");
-		//destinationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		//destinationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+		// destinationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		// destinationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		destinationPanel.add(destinationLabel);
 
 		final VerticalPanel timePanel = new VerticalPanel();
@@ -91,7 +90,7 @@ public class TaxiPanel extends HorizontalPanel
 		{
 			try
 			{
-				departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(	dateFormat.parse(taxi
+				departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(Taxi.dateFormat.parse(taxi
 																									.getPickupTime())));
 				departureTimeLabel.addStyleName("departureTimeLabel");
 			}
@@ -113,9 +112,8 @@ public class TaxiPanel extends HorizontalPanel
 			try
 			{
 				arrivalTimeLabel = new Label(
-						(int) Math.round(((dateFormat.parse(taxi.getArrivalTime()).getTime() - dateFormat
-								.parse(taxi.getPickupTime()).getTime()) / (60.0 * 1000)))
-								+ " mins");
+						(int) Math.round(((Taxi.dateFormat.parse(taxi.getArrivalTime()).getTime() - Taxi.dateFormat
+								.parse(taxi.getPickupTime()).getTime()) / (60.0 * 1000))) + " mins");
 				arrivalTimeLabel.addStyleName("arrivalTimeLabel");
 			}
 			catch (final Exception e)
@@ -171,7 +169,7 @@ public class TaxiPanel extends HorizontalPanel
 		add(farePanel);
 		add(savingPanel);
 
-		if (taxi.getStatus().equals("unconfirmed"))
+		if (taxi.getStatus().equals("unconfirmed") || taxi.getStatus().equals("left"))
 		{
 			for (int i = 0; i < getWidgetCount() - 1; i++)
 			{
