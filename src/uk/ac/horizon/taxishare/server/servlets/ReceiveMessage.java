@@ -6,12 +6,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import uk.ac.horizon.taxishare.server.Server;
 import uk.ac.horizon.taxishare.server.model.Instance;
 import uk.ac.horizon.taxishare.server.model.Message;
+import uk.ac.horizon.taxishare.server.model.Taxi;
 
 /**
  * Servlet to recieve a text message from Esendex.
@@ -55,8 +53,7 @@ public class ReceiveMessage extends HttpServlet
 			logger.info("Message Received");
 			logger.info("From: " + request.getParameter("originator"));
 			logger.info("Body: " + request.getParameter("body"));
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
-			final EntityManager entityManager = factory.createEntityManager();
+			final EntityManager entityManager = Server.createEntityManager();
 
 			final Message message = new Message(request.getParameter("originator"), request.getParameter("body"), true);
 			message.setProviderMessageID(request.getParameter("id"));
@@ -67,7 +64,6 @@ public class ReceiveMessage extends HttpServlet
 			catch (final Exception e)
 			{
 				message.setTimeReceived(new Date());
-				logger.log(Level.WARNING, e.getMessage(), e);
 			}
 
 			entityManager.getTransaction().begin();
@@ -81,7 +77,8 @@ public class ReceiveMessage extends HttpServlet
 
 			if (firstToken.toUpperCase().equals("LEAVE"))
 			{
-				Server.leaveTaxi(entityManager, message.getPhoneNumber());
+				Taxi taxi = Server.leaveTaxi(entityManager, message.getPhoneNumber());
+				Server.sendMessage(message.getPhoneNumber(), "You have left TAXI" + taxi.getId());				
 			}
 			else
 			{
@@ -92,7 +89,8 @@ public class ReceiveMessage extends HttpServlet
 				{
 					logger.info("Join taxi " + secondToken);
 					// Join Taxi by Taxi ID
-					Server.joinTaxi(entityManager, firstToken, message.getPhoneNumber(), secondToken);
+					final Taxi taxi = Server.joinTaxi(entityManager, firstToken, message.getPhoneNumber(), secondToken);
+					Server.sendMessage(message.getPhoneNumber(), "You have joined TAXI" + taxi.getId());
 				}
 				else
 				{
@@ -127,8 +125,10 @@ public class ReceiveMessage extends HttpServlet
 						}
 					}
 
-					Server.requestTaxi(	entityManager, instance.getId(), firstToken, message.getPhoneNumber(),
-										secondToken, spaces, time);
+					final Taxi taxi = Server.requestTaxi(	entityManager, instance, firstToken,
+															message.getPhoneNumber(), secondToken, spaces, time);
+
+					Server.sendMessage(message.getPhoneNumber(), "You have been added to TAXI" + taxi.getId());
 				}
 			}
 			entityManager.close();

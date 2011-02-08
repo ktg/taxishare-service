@@ -7,31 +7,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.sun.istack.internal.NotNull;
-
 @Entity
 public class Person
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	@NotNull
+	// @NotNull
 	private String name;
-	@NotNull
 	@Column(length = 16, unique = true)
 	private String number;
 	@ManyToOne
 	private Taxi taxi;
 
+	private int spaces;
+	
 	public Person()
 	{
-
 	}
 
-	public Person(final String name, final String number)
+	public Person(final String name, final String number, final int spaces)
 	{
 		this.name = name;
 		this.number = number;
+		this.spaces = spaces;
 	}
 
 	public int getId()
@@ -59,9 +58,8 @@ public class Person
 		this.name = name;
 	}
 
-	public Taxi setTaxi(final Taxi taxi)
+	public void setTaxi(final Taxi taxi)
 	{
-		final Taxi oldTaxi = this.taxi;
 		if (this.taxi != null)
 		{
 			this.taxi.remove(this);
@@ -71,6 +69,15 @@ public class Person
 		{
 			this.taxi.add(this);
 		}
-		return oldTaxi;
+	}
+
+	public void setSpaces(int spaces)
+	{
+		this.spaces = spaces;
+	}
+
+	public int getSpaces()
+	{
+		return spaces;
 	}
 }

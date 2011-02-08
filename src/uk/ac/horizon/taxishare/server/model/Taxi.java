@@ -13,8 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.sun.istack.internal.NotNull;
-
 @Entity
 public class Taxi
 {
@@ -27,7 +25,7 @@ public class Taxi
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int id;
 
-	@NotNull
+	// @NotNull
 	private Location destination;
 
 	@OneToMany(mappedBy = "taxi")
@@ -44,6 +42,8 @@ public class Taxi
 
 	private int totalSpace;
 
+	private int usedSpace = 0;
+	
 	private TaxiCompany company;
 
 	@ManyToOne
@@ -58,9 +58,12 @@ public class Taxi
 
 	}
 
-	public void add(final Person person)
-	{
-		people.add(person);
+	void add(final Person person)
+	{	
+		if(people.add(person))
+		{
+			usedSpace += person.getSpaces();			
+		}
 	}
 
 	public Date getArrivalTime()
@@ -70,7 +73,7 @@ public class Taxi
 
 	public int getAvailableSpace()
 	{
-		return totalSpace - people.size();
+		return totalSpace - usedSpace;
 	}
 
 	public TaxiCompany getCompany()
@@ -98,6 +101,11 @@ public class Taxi
 		return people;
 	}
 
+	public int getUsedSpace()
+	{
+		return usedSpace;
+	}
+
 	public Date getPickupTime()
 	{
 		return pickupTime;
@@ -123,9 +131,12 @@ public class Taxi
 		return totalSpace;
 	}
 
-	public void remove(final Person person)
+	void remove(final Person person)
 	{
-		people.remove(person);
+		if(people.remove(person))
+		{
+			refreshSpaces();	
+		}
 	}
 
 	public void setArrivalTime(final Date arrivalTime)
@@ -171,5 +182,14 @@ public class Taxi
 	public void setTotalSpace(final int totalSpace)
 	{
 		this.totalSpace = totalSpace;
+	}
+
+	public void refreshSpaces()
+	{
+		usedSpace = 0;
+		for(Person remainingPerson: people)
+		{
+			usedSpace += remainingPerson.getSpaces();
+		}	
 	}
 }

@@ -3,112 +3,136 @@ package uk.ac.horizon.taxishare.client;
 import uk.ac.horizon.taxishare.client.model.Taxi;
 
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class TaxiPanel extends HorizontalPanel
+public class TaxiPanel extends FlowPanel
 {
+	interface TaxiPanelUiBinder extends UiBinder<Widget, TaxiPanel>
+	{
+	}
+
+	// private static TaxiPanelUiBinder uiBinder = GWT.create(TaxiPanelUiBinder.class);
+
+	@UiField
+	Label idLabel;
+
+	@UiField
+	Label spaceLabel;
+
+	@UiField
+	Label destinationLabel;
+
+	@UiField
+	FlowPanel spaceIcons;
+
 	public TaxiPanel(final Taxi taxi)
 	{
-		setWidth((Window.getClientWidth() - 40) + "px");
-
-		final SimplePanel idPanel = new SimplePanel();
 		final Label idLabel = new Label("TAXI" + String.valueOf(taxi.getId()));
-		idLabel.addStyleName("idLabel");
-		// idPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-		// idPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		idPanel.add(idLabel);
+		idLabel.setStyleName("idLabel");
+		idLabel.addStyleName("taxiBoxLeft");
 
-		final int spaceLeft = taxi.getTotalSpace() - taxi.getPeople().length();
+		final int spaceLeft = taxi.getTotalSpace() - taxi.getUsedSpace();
 
 		Panel spacesPanel;
 		if (spaceLeft == 0)
 		{
 			spacesPanel = new SimplePanel();
-			// ((DockPanel)
-			// spacesPanel).setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-			// ((DockPanel) spacesPanel).setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 			final Label fullLabel = new Label("FULL");
-			fullLabel.addStyleName("idLabel");
+			fullLabel.setStyleName("destinationNameLabel");
 			spacesPanel.add(fullLabel);
 		}
 		else
 		{
-			spacesPanel = new VerticalPanel();
-			spacesPanel.add(new Label(String.valueOf(spaceLeft) + " seat(s) available"));
+			spacesPanel = new FlowPanel();
+			Label spaceLabel = null;
+			if (spaceLeft == 1)
+			{
+				spaceLabel = new Label(String.valueOf(spaceLeft) + " space");
+			}
+			else
+			{
+				spaceLabel = new Label(String.valueOf(spaceLeft) + " spaces");
+			}
+			spaceLabel.setStyleName("infoLabel");
+			spacesPanel.add(spaceLabel);
 			final FlowPanel spacesIcons = new FlowPanel();
 			for (int i = 0; i < taxi.getTotalSpace() - spaceLeft; i++)
 			{
-				if (taxi.getStatus().equals("unconfirmed"))
-				{
-					final Image fadedIcon = new Image("freespace.png");
-					fadedIcon.addStyleName("fadedIcon");
-					spacesIcons.add(fadedIcon);
-				}
-				else
-				{
-					spacesIcons.add(new Image("freespace.png"));
-				}
+				spacesIcons.add(new Image("freespace.png"));
 			}
 			for (int i = 0; i < spaceLeft; i++)
 			{
 				final Image fadedIcon = new Image("freespace.png");
-				if (taxi.getStatus().equals("unconfirmed"))
-				{
-					fadedIcon.addStyleName("veryFadedIcon");
-				}
-				else
-				{
-					fadedIcon.addStyleName("fadedIcon");
-				}
+				fadedIcon.addStyleName("fadedIcon");
 				spacesIcons.add(fadedIcon);
 			}
 			spacesPanel.add(spacesIcons);
 		}
+		spacesPanel.setStyleName("taxiBoxLeft");		
 
-		final SimplePanel destinationPanel = new SimplePanel();
 		final Label destinationLabel = new Label(taxi.getDestination().getName());
-		destinationLabel.addStyleName("destinationNameLabel");
+		destinationLabel.setStyleName("destinationNameLabel");
+		destinationLabel.addStyleName("taxiBoxMid");
 		// destinationPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		// destinationPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-		destinationPanel.add(destinationLabel);
 
-		final VerticalPanel timePanel = new VerticalPanel();
-		timePanel.add(new Label("Pickup:"));
-		Label departureTimeLabel;
+		add(idLabel);
+		add(spacesPanel);
+		add(destinationLabel);
+
 		if (taxi.getStatus().equals("unconfirmed"))
 		{
-			departureTimeLabel = new Label("unconfirmed");
+			final Label label = new Label("Not Booked Yet");
+			label.addStyleName("destinationNameLabel");
+			label.addStyleName("taxiBoxRight");
+
+			add(label);
+		}
+		else if(taxi.getStatus().equals("left"))
+		{
+			final Label label = new Label("Already Left");
+			label.addStyleName("destinationNameLabel");
+			label.addStyleName("taxiBoxRight");
+
+			add(label);			
 		}
 		else
 		{
-			try
+			final FlowPanel timePanel = new FlowPanel();
+			final Label pickupLabel = new Label("Pickup");
+			pickupLabel.setStyleName("infoLabel");
+			timePanel.add(pickupLabel);
+			Label departureTimeLabel;
+			if(taxi.getStatus().equals("arrived"))
 			{
-				departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(Taxi.dateFormat.parse(taxi
-																									.getPickupTime())));
-				departureTimeLabel.addStyleName("departureTimeLabel");
+				departureTimeLabel = new Label("Arrived");				
 			}
-			catch (final Exception e)
+			else
 			{
-				departureTimeLabel = new Label("unconfirmed");
-				e.printStackTrace();
+				try
+				{
+					departureTimeLabel = new Label(DateTimeFormat.getFormat("h:mm a").format(	Taxi.dateFormat.parse(taxi
+																										.getPickupTime())));
+				}
+				catch (final Exception e)
+				{
+					departureTimeLabel = new Label("unconfirmed");
+					e.printStackTrace();
+				}
 			}
-		}
-		timePanel.add(departureTimeLabel);
-		timePanel.add(new Label("Journey:"));
-		Label arrivalTimeLabel;
-		if (taxi.getStatus().equals("unconfirmed"))
-		{
-			arrivalTimeLabel = new Label("unconfirmed");
-		}
-		else
-		{
+			departureTimeLabel.addStyleName("departureTimeLabel");			
+			timePanel.add(departureTimeLabel);
+			final Label journeyLabel = new Label("Journey");
+			journeyLabel.setStyleName("infoLabel");
+			timePanel.add(journeyLabel);
+			Label arrivalTimeLabel;
 			try
 			{
 				arrivalTimeLabel = new Label(
@@ -120,80 +144,87 @@ public class TaxiPanel extends HorizontalPanel
 			{
 				arrivalTimeLabel = new Label("unconfirmed");
 			}
-		}
-		timePanel.add(arrivalTimeLabel);
+			timePanel.addStyleName("taxiBoxRight");
+			timePanel.add(arrivalTimeLabel);
 
-		final VerticalPanel farePanel = new VerticalPanel();
-		farePanel.add(new Label("Current fare:"));
-		String priceEach = String
-				.valueOf(((double) taxi.getPredictedCost() / (double) (taxi.getTotalSpace() - spaceLeft)));
-		if (priceEach.indexOf('.') > -1)
-		{
-			if (priceEach.length() < priceEach.indexOf('.') + 3)
+			final FlowPanel farePanel = new FlowPanel();
+			final Label fareLabel = new Label("Current Fare");
+			fareLabel.setStyleName("infoLabel");
+			farePanel.add(fareLabel);
+			String priceEach = String
+					.valueOf(((double) taxi.getPredictedCost() / (double) (taxi.getTotalSpace() - spaceLeft)));
+			if (priceEach.indexOf('.') > -1)
 			{
-				priceEach += "0";
+				if (priceEach.length() < priceEach.indexOf('.') + 3)
+				{
+					priceEach += "0";
+				}
+				else
+				{
+					priceEach = priceEach.substring(0, priceEach.indexOf('.') + 3);
+				}
+			}
+			final Label priceLabel = new Label("\u00A3" + priceEach + " each");
+			priceLabel.addStyleName("fareLabel");
+			farePanel.add(priceLabel);
+			if(taxi.getUsedSpace() > 1)
+			{
+				final Label totalLabel = new Label("\u00A3" + taxi.getPredictedCost() + " total (est.)");
+				totalLabel.setStyleName("infoLabel");
+				farePanel.add(totalLabel);
 			}
 			else
 			{
-				priceEach = priceEach.substring(0, priceEach.indexOf('.') + 3);
+				final Label totalLabel = new Label("estimated");
+				totalLabel.setStyleName("infoLabel");
+				farePanel.add(totalLabel);
 			}
+			farePanel.addStyleName("taxiBoxRight");
+			
+			if(spaceLeft > 0)
+			{
+				final FlowPanel savingPanel = new FlowPanel();
+				savingPanel.addStyleName("taxiBoxRight");
+				final Label fullLabel = new Label("Fare when Full");
+				fullLabel.setStyleName("infoLabel");
+				savingPanel.add(fullLabel);
+				String savingEach = String.valueOf((double) taxi.getPredictedCost() / (double) taxi.getTotalSpace());
+				if (savingEach.indexOf('.') > -1)
+				{
+					if (savingEach.length() < savingEach.indexOf('.') + 3)
+					{
+						savingEach += "0";
+					}
+					else
+					{
+						savingEach = savingEach.substring(0, savingEach.indexOf('.') + 3);
+					}
+				}
+				final Label savingLabel = new Label("\u00A3" + savingEach + " each");
+				savingLabel.addStyleName("fareLabel");
+				savingPanel.add(savingLabel);
+				final Label savingEachLabel = new Label("estimated");
+				savingEachLabel.setStyleName("infoLabel");
+				savingPanel.add(savingEachLabel);
+				
+				add(savingPanel);			
+			}
+
+			add(farePanel);
+			add(timePanel);
+
 		}
-		final Label priceLabel = new Label("\u00A3" + priceEach);
-		priceLabel.addStyleName("fareLabel");
-		farePanel.add(priceLabel);
-		farePanel.add(new Label("each; \u00A3" + taxi.getPredictedCost() + " total (est.)"));
 
-		final VerticalPanel savingPanel = new VerticalPanel();
-		savingPanel.add(new Label("Fare when full:"));
-		String savingEach = String.valueOf((double) taxi.getPredictedCost() / (double) taxi.getTotalSpace());
-		if (savingEach.indexOf('.') > -1)
+		if (taxi.getStatus().equals("left"))
 		{
-			if (savingEach.length() < savingEach.indexOf('.') + 3)
-			{
-				savingEach += "0";
-			}
-			else
-			{
-				savingEach = savingEach.substring(0, savingEach.indexOf('.') + 3);
-			}
-		}
-		final Label savingLabel = new Label("\u00A3" + savingEach);
-		savingLabel.addStyleName("fareLabel");
-		savingPanel.add(savingLabel);
-		savingPanel.add(new Label("each (estimated)"));
-
-		add(idPanel);
-		add(spacesPanel);
-		add(destinationPanel);
-		add(timePanel);
-		add(farePanel);
-		add(savingPanel);
-
-		if (taxi.getStatus().equals("unconfirmed") || taxi.getStatus().equals("left"))
-		{
-			for (int i = 0; i < getWidgetCount() - 1; i++)
-			{
-				getWidget(i).setStyleName("taxiBoxUnconfirmed");
-			}
-			getWidget(getWidgetCount() - 1).setStyleName("taxiBoxUnconfirmedLast");
-			setStyleName("taxiPanelUnconfirmed");
+			setStyleName("taxiPanelLeft");
 		}
 		else if (spaceLeft == 0)
 		{
-			for (int i = 0; i < getWidgetCount() - 1; i++)
-			{
-				getWidget(i).setStyleName("taxiBoxFull");
-			}
-			getWidget(getWidgetCount() - 1).setStyleName("taxiBoxFullLast");
 			setStyleName("taxiPanelFull");
 		}
 		else
 		{
-			for (int i = 0; i < getWidgetCount() - 1; i++)
-			{
-				getWidget(i).setStyleName("taxiBox");
-			}
-			getWidget(getWidgetCount() - 1).setStyleName("taxiBoxGreenLast");
 			setStyleName("taxiPanel");
 		}
 	}

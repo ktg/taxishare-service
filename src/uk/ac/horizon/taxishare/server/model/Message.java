@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.sun.istack.internal.NotNull;
-
 @Entity
 public class Message
 {
@@ -23,7 +21,8 @@ public class Message
 	private Date timeReceived;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdate;
-	@NotNull
+
+	// Not null
 	private String phoneNumber; // UserID
 	private boolean incoming;
 

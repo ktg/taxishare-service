@@ -6,12 +6,12 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class Taxi extends JavaScriptObject
 {
-	public static final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MMM-yyyy HH:mm:ss");
-	
 	public enum Status
 	{
 		unconfirmed, confirmed, arriving, arrived, left, cancelled
 	}
+
+	public static final DateTimeFormat dateFormat = DateTimeFormat.getFormat("dd-MMM-yyyy HH:mm:ss");
 
 	protected Taxi()
 	{
@@ -29,6 +29,8 @@ public class Taxi extends JavaScriptObject
 
 	public final native String getPickupTime() /*-{ return this.pickupTime; }-*/;
 
+	public final native int getUsedSpace() /*-{ return this.usedSpace; }-*/;
+	
 	public final native float getPredictedCost() /*-{ return this.predictedCost; }-*/;
 
 	public final native String getRequestTime() /*-{ return this.requestTime; }-*/;

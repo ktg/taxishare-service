@@ -20,6 +20,7 @@ import uk.ac.horizon.taxishare.client.model.Taxi;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JsArray;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.Response;
@@ -27,6 +28,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -61,8 +63,8 @@ public class TaxiShareUI implements EntryPoint
 	private static List<List<TaxiPanel>> pages = new ArrayList<List<TaxiPanel>>();
 
 	// private static MapPanel mp = new MapPanel();
-	private static VerticalPanel vPanel = new VerticalPanel();
-	private static HorizontalPanel hPanel = new HorizontalPanel();
+	private static FlowPanel taxisPanel = new FlowPanel();
+	private static HorizontalPanel destinationPanel = new HorizontalPanel();
 	private static DockPanel ivPanel = new DockPanel();
 
 	private static Timer countdownTimer = new Timer()
@@ -113,7 +115,7 @@ public class TaxiShareUI implements EntryPoint
 	{
 		final Label destinationTitle = new Label("Common destinations");
 		destinationTitle.setStyleName("destinationTitleLabel");
-		hPanel.add(destinationTitle);
+		destinationPanel.add(destinationTitle);
 	}
 
 	private static void loadInfoPanel()
@@ -128,9 +130,9 @@ public class TaxiShareUI implements EntryPoint
 		if (instance != null)
 		{
 			infoLabel.setText(instance.getNumber());
-			instructions = "To book a taxi, send a text message to "
+			instructions = "Book a taxi by sending a text message "
 					+ instance.getNumber()
-					+ " containing a one-word name (to identify yourself to the taxi-driver) followed by your destination. ";
+					+ " containing a one-word name (to identify yourself to the taxi-driver) followed by your destination.";
 		}
 		else
 		{
@@ -194,6 +196,10 @@ public class TaxiShareUI implements EntryPoint
 						continue;
 					}
 				}
+				else if(taxi.getUsedSpace() == 0)
+				{
+					continue;
+				}
 
 				if (heightRemaining < 0)
 				{
@@ -224,11 +230,11 @@ public class TaxiShareUI implements EntryPoint
 					thisDestination.setStyleName("destinationLabel");
 					final SlideLeft sl = new SlideLeft();
 					sl.setEffectElement(thisDestination.getElement());
-					hPanel.add(thisDestination);
+					destinationPanel.add(thisDestination);
 					sl.play();
 				}
 			}
-			if (hPanel.getOffsetWidth() > Window.getClientWidth() * 0.6)
+			if (destinationPanel.getOffsetWidth() > Window.getClientWidth() * 0.6)
 			{
 				RootPanel.get("destinationPanel").setStyleName("destinationPanelScroll");
 			}
@@ -281,26 +287,26 @@ public class TaxiShareUI implements EntryPoint
 
 	public TaxiShareUI()
 	{
-		mf = new Highlight(vPanel.getElement());
-		f.setEffectElement(vPanel.getElement());
-		ns.setEffectElement(vPanel.getElement());
+		mf = new Highlight(taxisPanel.getElement());
+		f.setEffectElement(taxisPanel.getElement());
+		ns.setEffectElement(taxisPanel.getElement());
 		ns.setDuration(1);
 		f.addEffectCompletedHandler(new EffectCompletedHandler()
 		{
 			@Override
 			public void onEffectCompleted(final EffectCompletedEvent evt)
 			{
-				vPanel.clear();
+				taxisPanel.clear();
 
 				if (pages.size() == 0)
 				{
-					vPanel.add(new Label("System is currently experiencing issues"));
+					taxisPanel.add(new Label("System is currently experiencing issues"));
 				}
 				else if (pageNum < pages.size())
 				{
 					for (final TaxiPanel panel : pages.get(pageNum))
 					{
-						vPanel.add(panel);
+						taxisPanel.add(panel);
 					}
 				}
 				else
@@ -325,9 +331,11 @@ public class TaxiShareUI implements EntryPoint
 	{
 		if (RootPanel.get("activePanel") != null)
 		{
-			RootPanel.get("activePanel").add(vPanel);
-			RootPanel.get("destinationPanel").add(hPanel);
+			RootPanel.get("activePanel").add(taxisPanel);
+			RootPanel.get("destinationPanel").add(destinationPanel);
 			RootPanel.get("info").add(ivPanel);
+
+			taxisPanel.getElement().getStyle().setMargin(20, Unit.PX);
 
 			requestUpdate();
 

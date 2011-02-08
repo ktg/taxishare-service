@@ -1,11 +1,19 @@
-html
-{
+html {
 	overflow-x: hidden;
 	overflow-y: hidden;
+	font-family: Lucida, Arial, sans-serif;
+	padding: 0px;
+	margin: 0px;
+}
+
+body {
+	padding: 0px;
+	margin: 0px;	
 }
 
 .background {
-	background: -webkit-gradient(linear, left top, right bottom, from(rgb(20,81,153)), to(rgb(66,127,200)));
+	background: -moz-linear-gradient(left top, #145199, #427FC8);
+	background: -webkit-gradient(linear, left top, right bottom, from(#145199), to(#427FC8));
 }
 
 #titlePanel {
@@ -13,7 +21,7 @@ html
 	font-family: arial black;
 	height: 110px;
 	position: relative;
-	}
+}
 
 #title {
 	text-transform: lowercase;
@@ -31,120 +39,157 @@ html
 	bottom: 15px;
 	right: 10px;
 	letter-spacing: -2pt;
-	}
-	
+}
+
 .pageLabel {
 	font-family: arial;
 	font-size: 20pt;
-	}
-	
+}
+
+.instructionLabel {
+	font-size: 18pt;
+}
+
 #infoPanel {
-	background: -webkit-gradient(linear, left top, right bottom, from(rgb(120,181,253)), to(rgb(20,81,153)));
+	background: -webkit-gradient(linear, left top, right bottom, from(#78B5FD), to(#145199));
+	background: -moz-linear-gradient(left top, #78B5FD, #145199);
 	width: 100%;
 	position: absolute;
 	bottom: 0;
-	color: rgb(50,50,50);
 	-webkit-box-shadow: 0 -15px 15px rgba(0, 0, 0, .4);
-	}
+}
 
 #info {
 	margin: 10px;
-	}
+}
 
-.taxiBox, .taxiBoxLast, .taxiBoxFull, .taxiBoxFullLast, .taxiBoxUnconfirmed, .taxiBoxUnconfirmedLast, .taxiBoxGreenLast {
-	margin: 5px;
-	padding: 5px;
-	height: 90%;
+.spaceLabel {
 	text-align: center;
 }
-.taxiBox, .taxiBoxFull, .taxiBoxUnconfirmed {
-	padding-right: 20px;
+
+.taxiPanelFull .taxiBoxLeft {
+	border-right: 3px solid rgba(58, 58, 58, 0.4);	
+	color: #222;
 }
 
-.taxiBoxGreenLast {
-	color: white;
-	}
-.taxiBox, .taxiBoxLast {
+.taxiPanelFull .idLabel {
+	color: #333;
+}
+
+.taxiPanelLeft .idLabel {
+	color: #444;
+}
+
+.taxiPanelFull .taxiBoxRight {
+	border-left: 3px solid rgba(58, 58, 58, 0.4);	
+}
+
+.taxiPanelLeft .taxiBoxLeft {
+	border-right: 3px solid rgba(58, 58, 58, 0.2);		
+}
+
+.taxiPanelLeft .taxiBoxRight {
+	border-left: 3px solid rgba(58, 58, 58, 0.2);		
+	color: #222;
+}
+
+
+.idLabel {
 	color: yellow;
+	width: 180px;
+	padding-left: 40px;
+	font-family: arial black;
+	letter-spacing: -3pt;
+	font-size: 30pt;
+	padding-top: 20px;	
 }
-.taxiBox {
-	border-right: 3px solid rgb(18,99,176);
+
+.taxiBoxLeft
+{	
+	float: left;
+	border-right: 3px solid #1263B0;
+	margin: 10px 0px;
+	padding: 0px 20px;
 }
-.taxiBoxFull, .taxiBoxFullLast {
-	color: rgba(100,20,0,0.6);
+
+.taxiBoxMid
+{
+	float:left;
+	margin: 10px 0px;
+	padding: 0px 20px;
 }
-.taxiBoxFull {
-	border-right: 3px solid rgba(139,58,58,0.4);
-}
-.taxiBoxUnconfirmed, .taxiBoxUnconfirmedLast {
-	color: rgba(20,20,20,0.3);
-}
-.taxiBoxUnconfirmed {
-	border-right: 3px solid rgba(20,20,20,0.2);
-}
-	
+
+.taxiBoxRight
+{
+	float:right;
+	border-left: 3px solid #1263B0;
+	margin: 10px 0px;
+	padding: 0px 20px;	
+}	
+
 #activePanel {
 	background-color: transparent;
 	width: 100%;
 	position: absolute;
-	padding: 20px;
-}
-.taxiPanel, .taxiPanelFull, .taxiPanelUnconfirmed {
-	margin-bottom: 10px;
-	border-top-left-radius: 15px;
-}
-.taxiPanel {
-	background: -webkit-gradient(linear,
-    left bottom,
-    left top,
-    color-stop(0.29, rgb(18,99,176)),
-    color-stop(0.65, rgb(46,132,212)));
-	border: 3px solid rgb(18,99,176);
-	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .4);
-}
-.taxiPanelFull {
-	background: -webkit-gradient(linear,
-    left bottom,
-    left top,
-    color-stop(0.29, rgba(139,58,58,0.4)),
-    color-stop(0.65, rgba(205,85,85,0.4)));
-	border: 3px solid rgba(139,58,58, 0.4);
-	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
-}
-.taxiPanelUnconfirmed {
-	background: -webkit-gradient(linear,
-    left bottom,
-    left top,
-    color-stop(0.29, rgba(58,58,58,0.2)),
-    color-stop(0.65, rgba(85,85,85,0.2)));
-	border: 3px solid rgba(20,20,20, 0.2);
-	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
 }
 
-.mapPanel {
+.taxiPanel,.taxiPanelFull,.taxiPanelLeft {
+	margin-bottom: 10px;
+	border-top-left-radius: 15px;
+	-moz-border-radius-topleft: 15px;
+}
+
+.taxiPanel {
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0.29, #1263B0), color-stop(0.65, #2E84D4));
+	background: -moz-linear-gradient(bottom, #1263B0 29%, #2E84D4 65% );
+	border: 3px solid #1263B0;
 	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 5px 5px 3px rgba(0, 0, 0, .4);
+}
+
+.taxiPanelFull {
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0.29, rgba(58
+		, 58, 58, 0.4) ), color-stop(0.65, rgba(85, 85, 85, 0.4) ) );
+	background: -moz-linear-gradient(bottom, rgba(58
+		, 58, 58, 0.4) 29%, rgba(85, 85, 85, 0.4) 65% );		
+	border: 3px solid rgba(58, 58, 58, 0.4);
+	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
+	color: #333;
+}
+
+.taxiPanelLeft {
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0.29, rgba(58
+		, 58, 58, 0.2) ), color-stop(0.65, rgba(85, 85, 85, 0.2) ) );
+	background: -moz-linear-gradient(bottom, rgba(58, 58, 58, 0.2) 29%,
+		rgba(85, 85, 85, 0.2) 65% );
+	border: 3px solid rgba(20, 20, 20, 0.2);
+	-webkit-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 5px 5px 3px rgba(0, 0, 0, .2);
+	color: #444;	
 }
 
 #destinationPanel {
 	background: white;
 	width: 100%;
-	padding: 10px 0px 10px 300px;
+	padding: 5px 0px 5px 300px;
 	margin-bottom: 10px;
-	border-bottom: 2px solid rgb(100,100,100);
-	color: rgb(100,100,100);
-	}
+	border-bottom: 2px solid #646464;
+	color: #646464;
+}
 
 .destinationPanelScroll {
-		overflow-x: -webkit-marquee;
-  -webkit-marquee-direction: backwards;
-  -webkit-marquee-style: scroll;
-  -webkit-marquee-speed: fast;
-  -webkit-marquee-increment: small;
+	overflow-x: -webkit-marquee;
+	-webkit-marquee-direction: backwards;
+	-webkit-marquee-style: scroll;
+	-webkit-marquee-speed: fast;
+	-webkit-marquee-increment: small;
 }
 
-.destinationTitleLabel, .destinationLabel {
+.destinationTitleLabel,.destinationLabel {
 	padding: 0px 10px 0px 10px;
 }
+
 .destinationTitleLabel {
 	text-transform: lowercase;
 	letter-spacing: -2pt;
@@ -155,11 +200,17 @@ html
 	background: white;
 	z-index: 1;
 }
+
+.infoLabel {
+	font-size: 15pt;
+	text-align: center;
+}
+
 .destinationLabel {
-	padding: 10px;
+	padding: 5px 20px;
 	position: relative;
 	z-index: 0;
-	font-size: 10pt;
+	font-size: 18pt;
 	text-transform: uppercase;
 	font-weight: bold;
 	letter-spacing: -1pt;
@@ -172,31 +223,43 @@ html
 	font-family: arial black;
 	line-height: 75%;
 }
+
 .exampleLabel {
 	text-transform: lowercase;
 	letter-spacing: -2pt;
 	font-size: 20pt;
 	font-family: arial black;
-	}
-
-.idLabel, .destinationNameLabel {
-		padding-top: 20px;
 }
 
-.spaceLeftLabel, .idLabel, .destinationNameLabel, .fareLabel {
+.idLabel,.destinationNameLabel {
+	padding-top: 20px;
+}
 
+.fareLabel {
+	text-align: center;
+	line-height: 38pt;
+}
+
+.spaceLeftLabel,.idLabel,.destinationNameLabel,.fareLabel {
 	font-family: arial black;
 	letter-spacing: -3pt;
 	font-size: 30pt;
-	}
-.departureTimeLabel, .arrivalTimeLabel {
+}
+
+.departureTimeLabel,.arrivalTimeLabel {
 	font-family: arial black;
 	letter-spacing: -1pt;
-	font-size: 10pt;
-	}
-.fadedIcon {
-	opacity:0.4;
+	font-size: 15pt;
 }
-.veryFadedIcon {
-	opacity:0.1;
+ 
+.taxiPanelLeft .gwt-Image {
+	opacity: 0.4;	
+}
+
+.taxiPanelLeft .fadedIcon {
+	opacity: 0.2;	
+}
+
+.fadedIcon {
+	opacity: 0.4;
 }

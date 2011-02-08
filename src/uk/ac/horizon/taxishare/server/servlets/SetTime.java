@@ -6,8 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +24,7 @@ public class SetTime extends HttpServlet
 	{
 		try
 		{
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
-			final EntityManager entityManager = factory.createEntityManager();
+			final EntityManager entityManager = Server.createEntityManager();
 
 			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
 			final String timeString = request.getParameter("time");

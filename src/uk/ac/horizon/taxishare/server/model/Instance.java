@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.sun.istack.internal.NotNull;
-
 /**
  * Represents a single instance of a
  * 
@@ -21,16 +19,14 @@ public class Instance
 	@Id
 	@GeneratedValue
 	private int id;
-	@NotNull
 	private Location location;
 	private Collection<Location> destinations = new ArrayList<Location>();
 	@OneToMany(mappedBy = "instance")
 	private Collection<Taxi> taxis = new ArrayList<Taxi>();
-	
+
 	private Collection<TaxiCompany> companies = new ArrayList<TaxiCompany>();
 	private boolean enabled = true;
 
-	@NotNull
 	private String number;
 
 	public Instance()
@@ -48,21 +44,26 @@ public class Instance
 		taxis.add(taxi);
 	}
 
+	public void remove(final Taxi taxi)
+	{
+		taxis.remove(taxi);
+	}
+	
 	public void add(final TaxiCompany taxiCompany)
 	{
 		companies.add(taxiCompany);
-	}
-	
-	public Iterable<Location> getDestinations()
-	{
-		return destinations;
 	}
 
 	public Iterable<TaxiCompany> getCompanies()
 	{
 		return companies;
 	}
-	
+
+	public Iterable<Location> getDestinations()
+	{
+		return destinations;
+	}
+
 	public boolean getEnabled()
 	{
 		return enabled;

@@ -1,7 +1,9 @@
 package uk.ac.horizon.taxishare.client;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import uk.ac.horizon.taxishare.client.model.Instance;
 import uk.ac.horizon.taxishare.client.model.Taxi;
@@ -25,7 +27,7 @@ public class TaxiShareAdmin extends Composite
 	}
 
 	private static TaxiShareAdminUiBinder uiBinder = GWT.create(TaxiShareAdminUiBinder.class);
-	
+
 	private static final native Instance parseJSONResponse(String json)
 	/*-{
 		return eval('(' + json + ')');
@@ -49,7 +51,7 @@ public class TaxiShareAdmin extends Composite
 	public TaxiShareAdmin(final TaxiShareService service)
 	{
 		this.service = service;
-		initWidget(uiBinder.createAndBindUi(this));		
+		initWidget(uiBinder.createAndBindUi(this));
 
 		final Timer requestTimer = new Timer()
 		{
@@ -100,10 +102,12 @@ public class TaxiShareAdmin extends Composite
 			GWT.log(response);
 			instance = parseJSONResponse(response);
 
+			Set<String> ids = new HashSet<String>();
 			for (int index = 0; index < instance.getTaxis().length(); index++)
 			{
 				final Taxi taxi = instance.getTaxis().get(index);
 				final String taxiID = "TAXI" + taxi.getId();
+				ids.add(taxiID);
 				TaxiAdminPanel panel = panels.get(taxiID);
 				if (panel == null)
 				{
@@ -114,16 +118,28 @@ public class TaxiShareAdmin extends Composite
 				panel.update(taxi);
 			}
 			
-			locations.clear();
-			for(int index = 0; index < instance.getDestinations().length(); index++)
+			for(String taxiID: panels.keySet())
 			{
-				locations.add(new Label(instance.getDestinations().get(index).getName() + " " + instance.getDestinations().get(index).getPostcode()));
+				if(!ids.contains(taxiID))
+				{
+					TaxiAdminPanel panel = panels.get(taxiID);
+					taxis.remove(panel);
+					panels.remove(taxiID);
+				}
 			}
-			
-			companies.clear();
-			for(int index = 0; index < instance.getCompanies().length(); index++)
+
+			locations.clear();
+			for (int index = 0; index < instance.getDestinations().length(); index++)
 			{
-				companies.add(new Label(instance.getCompanies().get(index).getName() + ": " + instance.getCompanies().get(index).getNumber()));
+				locations.add(new Label(instance.getDestinations().get(index).getName() + " "
+						+ instance.getDestinations().get(index).getPostcode()));
+			}
+
+			companies.clear();
+			for (int index = 0; index < instance.getCompanies().length(); index++)
+			{
+				companies.add(new Label(instance.getCompanies().get(index).getName() + ": "
+						+ instance.getCompanies().get(index).getNumber()));
 			}
 
 		}

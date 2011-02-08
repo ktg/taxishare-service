@@ -37,11 +37,11 @@ public class DestinationEntityTest
 	@Test
 	public void testPostcodeQuery()
 	{
-		Location destination = Server.getLocation(entityManager, "Ng9 2wb");
+		Location destination = Server.getLocation(entityManager, null, "Ng9 2wb");
 		assert destination.getId() == TestHelper.getDestinationID();
-		destination = Server.getLocation(entityManager, "ng92WB");
+		destination = Server.getLocation(entityManager, null, "ng92WB");
 		assert destination.getId() == TestHelper.getDestinationID();
-		destination = Server.getLocation(entityManager, "ng9 2wb");
+		destination = Server.getLocation(entityManager, null, "ng9 2wb");
 		assert destination.getId() == TestHelper.getDestinationID();
 	}
 

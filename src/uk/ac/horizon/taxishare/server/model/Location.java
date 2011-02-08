@@ -8,8 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.sun.istack.internal.NotNull;
-
 @Entity
 public class Location
 {
@@ -35,7 +33,7 @@ public class Location
 	@Column(unique = true)
 	private String name;
 
-	@NotNull
+	// @NotNull
 	@Column(length = 10, unique = true)
 	private String postcode;
 

@@ -5,13 +5,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import uk.ac.horizon.taxishare.server.Server;
 import uk.ac.horizon.taxishare.server.model.Taxi;
 
 public class SetFare extends HttpServlet
@@ -26,8 +25,7 @@ public class SetFare extends HttpServlet
 
 		try
 		{
-			final EntityManagerFactory factory = Persistence.createEntityManagerFactory("taxishare");
-			final EntityManager entityManager = factory.createEntityManager();
+			final EntityManager entityManager = Server.createEntityManager();
 
 			final int taxiID = Integer.parseInt(request.getParameter("taxiID"));
 			String fareString = request.getParameter("fare");

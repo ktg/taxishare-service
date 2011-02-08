@@ -29,18 +29,17 @@ public class TaxiEntityTest
 	public void testAddPerson()
 	{
 		Taxi taxi = entityManager.find(Taxi.class, TestHelper.getTaxiID());
-		final Person person = new Person("Kevin", "07797798175");
+		final Person person = new Person("Kevin", "07797798175", 1);
 		person.setTaxi(taxi);
-		taxi.add(person);
 		entityManager.getTransaction().begin();
 		entityManager.persist(person);
 		entityManager.merge(taxi);
 		entityManager.getTransaction().commit();
 		taxi = entityManager.find(Taxi.class, TestHelper.getTaxiID());
-		taxi.remove(person);
+		person.setTaxi(null);
 		entityManager.getTransaction().begin();
 		entityManager.merge(taxi);
-		entityManager.remove(person);		
+		entityManager.remove(person);
 		entityManager.getTransaction().commit();
 	}
 

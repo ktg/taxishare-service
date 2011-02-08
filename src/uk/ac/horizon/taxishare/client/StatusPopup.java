@@ -38,6 +38,7 @@ public class StatusPopup extends PopupPanel
 
 	public StatusPopup()
 	{
+		super(true);
 		add(uiBinder.createAndBindUi(this));
 	}
 

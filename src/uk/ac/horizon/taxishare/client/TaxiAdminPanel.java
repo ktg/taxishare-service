@@ -7,7 +7,6 @@ import uk.ac.horizon.taxishare.client.model.Person;
 import uk.ac.horizon.taxishare.client.model.Taxi;
 import uk.ac.horizon.taxishare.client.model.TaxiCompany;
 
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -26,7 +25,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class TaxiAdminPanel extends Composite
 {
-
 	interface TaxiAdminPanelUiBinder extends UiBinder<Widget, TaxiAdminPanel>
 	{
 	}
@@ -37,14 +35,14 @@ public class TaxiAdminPanel extends Composite
 	private Instance instance;
 	private final TaxiShareService service;
 	private static StatusPopup statusSelect = new StatusPopup();
-	private static PopupPanel companySelect = new PopupPanel();
+	private static PopupPanel companySelect = new PopupPanel(true);
 
 	@UiField
 	Label taxiID;
 
 	@UiField
 	FlowPanel people;
-	
+
 	@UiField
 	Label destination;
 
@@ -73,11 +71,13 @@ public class TaxiAdminPanel extends Composite
 
 	public void update(final Taxi taxi)
 	{
-		final String oldArrival = this.taxi.getArrivalTime();
-		final String oldPickup = this.taxi.getPickupTime();
+		String oldArrival = null;
+		String oldPickup = null;
 		float oldFare = 0;
 		if (this.taxi != null)
 		{
+			oldArrival = this.taxi.getArrivalTime();
+			oldPickup = this.taxi.getPickupTime();
 			oldFare = this.taxi.getPredictedCost();
 		}
 
@@ -125,12 +125,21 @@ public class TaxiAdminPanel extends Composite
 			final Date pickupTime = Taxi.dateFormat.parse(taxi.getPickupTime());
 			pickup.setText(DateTimeFormat.getFormat("h:mm aa").format(pickupTime));
 		}
-		
+
 		people.clear();
-		for(int index = 0; index < taxi.getPeople().length(); index++)
+		for (int index = 0; index < taxi.getPeople().length(); index++)
 		{
-			Person person = taxi.getPeople().get(index);
-			Label label = new Label(person.getName());
+			final Person person = taxi.getPeople().get(index);
+			Label label;
+			if(person.getSpaces() > 1)
+			{
+				label = new Label(person.getName() + " (+" + (person.getSpaces() - 1) + ")");
+			}
+			else
+			{
+				label = new Label(person.getName());				
+			}
+
 			label.setTitle(person.getNumber());
 			people.add(label);
 		}
@@ -147,18 +156,18 @@ public class TaxiAdminPanel extends Composite
 	void handleCompanyClick(final ClickEvent e)
 	{
 		companySelect.clear();
-		for(int index = 0; index < instance.getCompanies().length(); index++)
+		for (int index = 0; index < instance.getCompanies().length(); index++)
 		{
 			final TaxiCompany company = instance.getCompanies().get(index);
 			final Button button = new Button(company.getName());
 			button.addClickHandler(new ClickHandler()
 			{
 				@Override
-				public void onClick(ClickEvent event)
+				public void onClick(final ClickEvent event)
 				{
 					service.setCompany(taxi.getId(), company.getId());
 					companySelect.hide();
-					
+
 				}
 			});
 			companySelect.add(button);

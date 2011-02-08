@@ -1,0 +1,9 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:FlowPanel styleName="taxiPanel">
+		<g:Label styleName="idLabel taxiBoxLeft" ui:field="idLabel"/>
+		<div styleName="taxiBoxLeft"><g:Label ui:field="spaceLabel"/><g:FlowPanel ui:field="spaceIcons"/></div>
+		<g:Label styleName="destinationLabel taxiBoxMid" ui:field="destinationLabel"/>				
+	</g:FlowPanel>
+</ui:UiBinder> 

@@ -13,4 +13,6 @@ public class Person extends JavaScriptObject
 	public native final String getName() /*-{ return this.name; }-*/;
 
 	public native final String getNumber() /*-{ return this.number; }-*/;
+
+	public native final int getSpaces() /*-{ return this.spaces; }-*/;
 }

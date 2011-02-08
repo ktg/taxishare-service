@@ -9,9 +9,9 @@ public class Instance extends JavaScriptObject
 	{
 	}
 
+	public final native JsArray<TaxiCompany> getCompanies() /*-{ return this.companies; }-*/;
+
 	public final native JsArray<Destination> getDestinations() /*-{ return this.destinations; }-*/;
-	
-	public final native JsArray<TaxiCompany> getCompanies() /*-{ return this.companies; }-*/;	
 
 	public final native int getId() /*-{ return this.id; }-*/;
 
