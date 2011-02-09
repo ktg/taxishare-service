@@ -37,9 +37,6 @@ public class TaxiShareAdmin extends Composite
 	FlowPanel companies;
 
 	@UiField
-	FlowPanel locations;
-
-	@UiField
 	FlowPanel taxis;
 
 	private final TaxiShareService service;
@@ -128,18 +125,21 @@ public class TaxiShareAdmin extends Composite
 				}
 			}
 
-			locations.clear();
-			for (int index = 0; index < instance.getDestinations().length(); index++)
-			{
-				locations.add(new Label(instance.getDestinations().get(index).getName() + " "
-						+ instance.getDestinations().get(index).getPostcode()));
-			}
+//			locations.clear();
+//			for (int index = 0; index < instance.getDestinations().length(); index++)
+//			{
+//				Label label = new Label(instance.getDestinations().get(index).getName() + " "
+//										+ instance.getDestinations().get(index).getPostcode());
+//				locations.add(label);
+//			}
 
 			companies.clear();
 			for (int index = 0; index < instance.getCompanies().length(); index++)
 			{
-				companies.add(new Label(instance.getCompanies().get(index).getName() + ": "
-						+ instance.getCompanies().get(index).getNumber()));
+				Label label = new Label(instance.getCompanies().get(index).getName() + ": "
+										+ instance.getCompanies().get(index).getNumber());
+				label.setStyleName("infoLabel");
+				companies.add(label);
 			}
 
 		}

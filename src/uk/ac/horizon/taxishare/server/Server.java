@@ -71,11 +71,6 @@ public class Server
 			final Location newDest = new Location(postcode.replaceAll(" ", ""), postcode);
 			entityManager.getTransaction().begin();
 			entityManager.persist(newDest);
-			if(instance != null)
-			{
-				instance.add(newDest);				
-				entityManager.merge(instance);
-			}
 			entityManager.getTransaction().commit();
 			return newDest;
 		}
@@ -92,8 +87,9 @@ public class Server
 		{
 			final Person person = createPerson(entityManager, name, number, 1);
 			final Taxi taxi = getTaxi(entityManager, taxiID);
-			logger.info("Join taxi " + taxiID + "=" + taxi + ", " + number + "=" + person);
+			logger.info("Join taxi " + taxiID + ", " + number + "=" + person.getNumber());
 			joinTaxi(entityManager, taxi, person);
+			return taxi;
 		}
 		catch (final Exception e)
 		{
@@ -284,7 +280,7 @@ public class Server
 		return taxi;
 	}
 
-	private static Person getPerson(final EntityManager entityManager, final String number)
+	public static Person getPerson(final EntityManager entityManager, final String number)
 	{
 		final Query query = entityManager.createQuery("SELECT p FROM Person p WHERE p.number = :value");
 		query.setParameter("value", number);

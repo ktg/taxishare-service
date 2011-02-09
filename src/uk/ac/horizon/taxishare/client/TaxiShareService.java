@@ -13,4 +13,6 @@ public interface TaxiShareService
 	public void setStatus(int taxiID, String text);
 
 	public void setTime(int taxiID, String time, String type);
+	
+	public void removePerson(String number);	
 }

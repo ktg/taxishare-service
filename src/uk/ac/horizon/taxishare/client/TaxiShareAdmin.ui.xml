@@ -8,27 +8,32 @@
 			right: 0px;
 			top: 0px;
 			bottom: 0px;
+			overflow: auto;
+		}
+		
+		.abs {
+			position: absolute;
 		}
 		
 		.clickable {
 			cursor: pointer;
 		}
+		
+		.companies {
+			position: absolute;
+			left: 0px;
+			bottom: 0px;
+			padding: 5px;
+		}
 	</ui:style>
 	<g:DockLayoutPanel styleName="{style.main}">
 		<g:center>
-			<g:FlowPanel ui:field="taxis" />
+			<g:FlowPanel styleName="{style.abs}" ui:field="taxis" />
 		</g:center>
-		<g:east size="200">
+		<g:south size="50">
 			<g:FlowPanel>
-				<g:FlowPanel>
-					<g:Label>Companies</g:Label>
-					<g:FlowPanel ui:field="companies" />
-				</g:FlowPanel>
-				<g:FlowPanel>
-					<g:Label>Locations</g:Label>
-					<g:FlowPanel ui:field="locations" />
-				</g:FlowPanel>
+				<g:FlowPanel styleName="{style.companies}" ui:field="companies" />
 			</g:FlowPanel>
-		</g:east>
+		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

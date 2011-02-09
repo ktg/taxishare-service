@@ -5,28 +5,22 @@
 		.clickable {
 			cursor: pointer;
 		}
+		.lefty {
+			text-align: left;
+		}
+		.width {
+			width: 115px;
+			float: left;
+		}
 	</ui:style>
 	<g:HTMLPanel styleName="taxiPanel">
-		<table>
-		<tr><td>
-		<g:Label styleName="idLabel" ui:field="taxiID" />
-		</td>
-		<td>
-		<g:Label ui:field="destination" />
-		<g:Label addStyleNames="{style.clickable}" ui:field="status" />
-		</td>
-		<td><g:FlowPanel ui:field="people" /></td>		
-		<td>
-		<g:Label ui:field="company" />		
-		</td>
-		<!-- <td>
-		People...
-		</td>-->
-		<td><span>Fare: </span><g:TextBox ui:field="fare"/></td>
-		<td><span>Pickup Time: </span><g:TextBox ui:field="pickup"/><br/>
-		<span>Arrival Time: </span><g:TextBox ui:field="arrival"/>
-		</td>		
-		</tr>
-		</table>		
+		<g:Label styleName="idLabel taxiBoxLeft" ui:field="taxiID" />
+		<div class="taxiBoxLeft"><g:Label styleName="timeLabel" ui:field="destination" />
+		<g:Label styleName="timeLabel {style.clickable}" ui:field="status" /></div>
+		<g:FlowPanel styleName="taxiBoxLeft" ui:field="people" />				
+		<div class="taxiBoxLeft infoLabel"><g:Label styleName="{style.lefty}" ui:field="company" /><span class="infoLabel">Fare: </span><g:TextBox ui:field="fare"/></div>
+		<div class="taxiBoxLeft"><div><div class="infoLabel {style.lefty} {style.width}">Pickup Time:</div> <g:TextBox ui:field="pickup"/></div>
+		<div><div class="infoLabel {style.lefty} {style.width}">Arrival Time:</div><g:TextBox ui:field="arrival"/></div>
+		</div>		
 	</g:HTMLPanel>
 </ui:UiBinder> 

@@ -1,5 +1,7 @@
 package uk.ac.horizon.taxishare.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import uk.ac.horizon.taxishare.client.model.Instance;
@@ -15,11 +17,9 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -34,8 +34,9 @@ public class TaxiAdminPanel extends Composite
 	private Taxi taxi;
 	private Instance instance;
 	private final TaxiShareService service;
-	private static StatusPopup statusSelect = new StatusPopup();
-	private static PopupPanel companySelect = new PopupPanel(true);
+	private static PopupMenu popupMenu = new PopupMenu();
+	
+	private final Collection<PopupAction> stateActions = new ArrayList<PopupAction>();
 
 	@UiField
 	Label taxiID;
@@ -67,6 +68,55 @@ public class TaxiAdminPanel extends Composite
 		this.service = service;
 		initWidget(uiBinder.createAndBindUi(this));
 		update(taxi);
+		
+		stateActions.add(new PopupAction("Unconfirmed", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "unconfirmed");				
+			}
+		}));
+		stateActions.add(new PopupAction("Confirmed", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "confirmed");				
+			}
+		}));
+		stateActions.add(new PopupAction("Arriving", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "arriving");				
+			}
+		}));
+		stateActions.add(new PopupAction("Arrived", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "arrived");				
+			}
+		}));
+		stateActions.add(new PopupAction("Left", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "left");				
+			}
+		}));
+		stateActions.add(new PopupAction("cancelled", new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				service.setStatus(taxi.getId(), "cancelled");				
+			}
+		}));		
 	}
 
 	public void update(final Taxi taxi)
@@ -140,7 +190,26 @@ public class TaxiAdminPanel extends Composite
 				label = new Label(person.getName());				
 			}
 
+			label.setStyleName("infoLabel");
 			label.setTitle(person.getNumber());
+			label.addClickHandler(new ClickHandler()
+			{
+				@Override
+				public void onClick(ClickEvent event)
+				{
+					final Collection<PopupAction> actions = new ArrayList<PopupAction>();
+					actions.add(new PopupAction("Remove " + person.getName(), new Runnable()
+					{	
+						@Override
+						public void run()
+						{
+							service.removePerson(person.getNumber());
+						}
+					}));
+					popupMenu.popup(actions, event);
+					
+				}
+			});
 			people.add(label);
 		}
 	}
@@ -155,25 +224,22 @@ public class TaxiAdminPanel extends Composite
 	@UiHandler("company")
 	void handleCompanyClick(final ClickEvent e)
 	{
-		companySelect.clear();
+		Collection<PopupAction> actions = new ArrayList<PopupAction>();
 		for (int index = 0; index < instance.getCompanies().length(); index++)
 		{
 			final TaxiCompany company = instance.getCompanies().get(index);
-			final Button button = new Button(company.getName());
-			button.addClickHandler(new ClickHandler()
+			
+			actions.add(new PopupAction(company.getName(), new Runnable()
 			{
+				
 				@Override
-				public void onClick(final ClickEvent event)
+				public void run()
 				{
 					service.setCompany(taxi.getId(), company.getId());
-					companySelect.hide();
-
 				}
-			});
-			companySelect.add(button);
+			}));
 		}
-		companySelect.setPopupPosition(e.getClientX(), e.getClientY());
-		companySelect.show();
+		popupMenu.popup(actions, e);
 	}
 
 	@UiHandler("fare")
@@ -191,8 +257,6 @@ public class TaxiAdminPanel extends Composite
 	@UiHandler("status")
 	void handleStatusClick(final ClickEvent e)
 	{
-		statusSelect.setTaxi(taxi.getId(), service);
-		statusSelect.setPopupPosition(e.getClientX(), e.getClientY());
-		statusSelect.show();
+		popupMenu.popup(stateActions, e);
 	}
 }

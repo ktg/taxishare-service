@@ -82,8 +82,6 @@ public class TaxiShareUI implements EntryPoint
 
 	static Label infoLabel = new Label();
 
-	private static final int ph = 120;
-
 	private static void loadAttsPanel()
 	{
 		RootPanel.get("page").add(pageLabel);
@@ -182,6 +180,7 @@ public class TaxiShareUI implements EntryPoint
 
 			final int heightToFill = (int) (Window.getClientHeight() * 0.4);
 			int heightRemaining = heightToFill;
+			GWT.log("Remaining Height: " + heightToFill+ ", " + taxisPanel.getElement().getClientHeight());			
 			int currPage = 0;
 			final JsArray<Taxi> taxis = instance.getTaxis();
 			for (int i = 0; i < taxis.length(); i++)
@@ -212,10 +211,8 @@ public class TaxiShareUI implements EntryPoint
 				{
 					pages.add(currPage, new ArrayList<TaxiPanel>());
 				}
-				p.setHeight(ph + "px");
 				pages.get(currPage).add(p);
-				heightRemaining -= ph;
-
+				heightRemaining -= 124;
 			}
 			// mp.addRoutes(instance.getLocation(), instance.getTaxis());
 

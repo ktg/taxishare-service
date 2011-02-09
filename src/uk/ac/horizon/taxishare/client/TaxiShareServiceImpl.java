@@ -80,4 +80,10 @@ public class TaxiShareServiceImpl implements TaxiShareService
 			GWT.log(e.getMessage(), e);
 		}
 	}
+
+	@Override
+	public void removePerson(String number)
+	{
+		serverRequest(getHostURL() + "removePerson?number=" + number, defaultCallback);		
+	}
 }

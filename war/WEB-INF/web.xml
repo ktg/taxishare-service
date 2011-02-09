@@ -36,6 +36,16 @@
 		<servlet-class>uk.ac.horizon.taxishare.server.servlets.SetCompany</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>removePerson</servlet-name>
+		<servlet-class>uk.ac.horizon.taxishare.server.servlets.RemovePerson</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>removePerson</servlet-name>
+		<url-pattern>/removePerson</url-pattern>
+	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>setCompany</servlet-name>
 		<url-pattern>/setCompany</url-pattern>

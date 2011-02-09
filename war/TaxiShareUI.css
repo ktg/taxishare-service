@@ -1,6 +1,4 @@
 html {
-	overflow-x: hidden;
-	overflow-y: hidden;
 	font-family: Lucida, Arial, sans-serif;
 	padding: 0px;
 	margin: 0px;
@@ -8,7 +6,8 @@ html {
 
 body {
 	padding: 0px;
-	margin: 0px;	
+	margin: 0px;
+	height: 1px;	
 }
 
 .background {
@@ -113,7 +112,7 @@ body {
 }
 
 .taxiBoxMid
-{
+{	
 	float:left;
 	margin: 10px 0px;
 	padding: 0px 20px;
@@ -135,9 +134,16 @@ body {
 
 .taxiPanel,.taxiPanelFull,.taxiPanelLeft {
 	margin-bottom: 10px;
+	overflow: auto;
 	border-top-left-radius: 15px;
 	-moz-border-radius-topleft: 15px;
 }
+
+.menuItem {
+	width: 100%;
+	text-align: center;
+	display: block;
+}	
 
 .taxiPanel {
 	background: -webkit-gradient(linear, left bottom, left top, color-stop(0.29, #1263B0), color-stop(0.65, #2E84D4));
@@ -246,10 +252,11 @@ body {
 	font-size: 30pt;
 }
 
-.departureTimeLabel,.arrivalTimeLabel {
+.timeLabel {
 	font-family: arial black;
 	letter-spacing: -1pt;
 	font-size: 15pt;
+	text-align: center;
 }
  
 .taxiPanelLeft .gwt-Image {

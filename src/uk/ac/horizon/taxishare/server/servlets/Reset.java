@@ -48,7 +48,8 @@ public class Reset extends HttpServlet
 			instance.setLocation(source);
 			instance.setNumber("07786202578");
 
-			final TaxiCompany taxiCompany = new TaxiCompany("DG Cars", "01159607607");
+			final TaxiCompany taxiCompany = new TaxiCompany("DG Cars", "0115 9607607");
+			final TaxiCompany taxiCompany2 = new TaxiCompany("A1 Cars", "0115 9708708");			
 
 			instance.add(destination);
 			instance.add(destination2);
@@ -56,9 +57,11 @@ public class Reset extends HttpServlet
 			instance.add(destination4);			
 
 			instance.add(taxiCompany);
+			instance.add(taxiCompany2);			
 
 			entityManager.getTransaction().begin();
 			entityManager.persist(taxiCompany);
+			entityManager.persist(taxiCompany2);			
 			entityManager.persist(source);
 			entityManager.persist(destination);
 			entityManager.persist(destination2);

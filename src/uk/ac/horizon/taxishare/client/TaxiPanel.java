@@ -41,7 +41,7 @@ public class TaxiPanel extends FlowPanel
 		final int spaceLeft = taxi.getTotalSpace() - taxi.getUsedSpace();
 
 		Panel spacesPanel;
-		if (spaceLeft == 0)
+		if (spaceLeft <= 0)
 		{
 			spacesPanel = new SimplePanel();
 			final Label fullLabel = new Label("FULL");
@@ -89,7 +89,7 @@ public class TaxiPanel extends FlowPanel
 
 		if (taxi.getStatus().equals("unconfirmed"))
 		{
-			final Label label = new Label("Not Booked Yet");
+			final Label label = new Label("Booking");
 			label.addStyleName("destinationNameLabel");
 			label.addStyleName("taxiBoxRight");
 
@@ -127,7 +127,7 @@ public class TaxiPanel extends FlowPanel
 					e.printStackTrace();
 				}
 			}
-			departureTimeLabel.addStyleName("departureTimeLabel");			
+			departureTimeLabel.addStyleName("timeLabel");			
 			timePanel.add(departureTimeLabel);
 			final Label journeyLabel = new Label("Journey");
 			journeyLabel.setStyleName("infoLabel");
@@ -138,12 +138,12 @@ public class TaxiPanel extends FlowPanel
 				arrivalTimeLabel = new Label(
 						(int) Math.round(((Taxi.dateFormat.parse(taxi.getArrivalTime()).getTime() - Taxi.dateFormat
 								.parse(taxi.getPickupTime()).getTime()) / (60.0 * 1000))) + " mins");
-				arrivalTimeLabel.addStyleName("arrivalTimeLabel");
 			}
 			catch (final Exception e)
 			{
 				arrivalTimeLabel = new Label("unconfirmed");
 			}
+			arrivalTimeLabel.addStyleName("timeLabel");			
 			timePanel.addStyleName("taxiBoxRight");
 			timePanel.add(arrivalTimeLabel);
 
@@ -215,6 +215,8 @@ public class TaxiPanel extends FlowPanel
 
 		}
 
+		getElement().getStyle().setPropertyPx("minHeight", 120);
+		
 		if (taxi.getStatus().equals("left"))
 		{
 			setStyleName("taxiPanelLeft");
