@@ -221,7 +221,7 @@ public class TaxiPanel extends FlowPanel
 		{
 			setStyleName("taxiPanelLeft");
 		}
-		else if (spaceLeft == 0)
+		else if (spaceLeft <= 0)
 		{
 			setStyleName("taxiPanelFull");
 		}

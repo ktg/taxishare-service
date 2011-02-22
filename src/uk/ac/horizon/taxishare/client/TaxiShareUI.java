@@ -27,15 +27,11 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class TaxiShareUI implements EntryPoint
 {
@@ -65,7 +61,7 @@ public class TaxiShareUI implements EntryPoint
 	// private static MapPanel mp = new MapPanel();
 	private static FlowPanel taxisPanel = new FlowPanel();
 	private static HorizontalPanel destinationPanel = new HorizontalPanel();
-	private static DockPanel ivPanel = new DockPanel();
+	private static Label phoneNumber;
 
 	private static Timer countdownTimer = new Timer()
 	{
@@ -81,6 +77,8 @@ public class TaxiShareUI implements EntryPoint
 	static final Label pageLabel = new Label();
 
 	static Label infoLabel = new Label();
+
+	private static Label instructions;
 
 	private static void loadAttsPanel()
 	{
@@ -109,60 +107,6 @@ public class TaxiShareUI implements EntryPoint
 		}
 	}
 
-	private static void loadDestinationPanel()
-	{
-		final Label destinationTitle = new Label("Common destinations");
-		destinationTitle.setStyleName("destinationTitleLabel");
-		destinationPanel.add(destinationTitle);
-	}
-
-	private static void loadInfoPanel()
-	{
-		ivPanel.clear();
-		ivPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_LEFT);
-		ivPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-		ivPanel.setSpacing(20);
-
-		final VerticalPanel v = new VerticalPanel();
-		String instructions;
-		if (instance != null)
-		{
-			infoLabel.setText(instance.getNumber());
-			instructions = "Book a taxi by sending a text message "
-					+ instance.getNumber()
-					+ " containing a one-word name (to identify yourself to the taxi-driver) followed by your destination.";
-		}
-		else
-		{
-			infoLabel.setText("Instructions");
-			instructions = "Waiting";
-		}
-		infoLabel.setStyleName("infoTitleLabel");
-		v.add(infoLabel);
-		final Label exampleLabel = new Label("e.g. \"ben trainstation\"");
-		exampleLabel.addStyleName("exampleLabel");
-		v.add(exampleLabel);
-		v.addStyleName("examplePanel");
-		ivPanel.add(v, DockPanel.WEST);
-
-		String sampleDestination;
-		if (instance != null && instance.getDestinations().length() > 0)
-		{
-			sampleDestination = "You can type one of the destinations listed above (e.g. "
-					+ instance.getDestinations().get(0).getName()
-					+ "), or specify one of your own choosing (e.g. a postcode or a place name)";
-		}
-		else
-		{
-			sampleDestination = "You can specify a destination using a postcode (e.g. ng51bb) or a placename (e.g. Victoria Centre)";
-		}
-		final Label instructionLabel = new Label(instructions + sampleDestination);
-		instructionLabel.addStyleName("instructionLabel");
-		ivPanel.add(instructionLabel, DockPanel.CENTER);
-
-		// ivPanel.add(new Image("horizonIcon.png"), DockPanel.EAST);
-	}
-
 	private static final native Instance parseJSONResponse(String json)
 	/*-{
 		return eval('(' + json + ')');
@@ -174,29 +118,35 @@ public class TaxiShareUI implements EntryPoint
 		{
 			GWT.log(response);
 			instance = parseJSONResponse(response);
+
+			updateInstructions();
+
 			pages.clear();
-
-			loadInfoPanel();
-
 			final int heightToFill = (int) (Window.getClientHeight() * 0.4);
 			int heightRemaining = heightToFill;
-			GWT.log("Remaining Height: " + heightToFill+ ", " + taxisPanel.getElement().getClientHeight());			
+			GWT.log("Remaining Height: " + heightToFill + ", " + taxisPanel.getElement().getClientHeight());
 			int currPage = 0;
 			final JsArray<Taxi> taxis = instance.getTaxis();
 			for (int i = 0; i < taxis.length(); i++)
 			{
 				final Taxi taxi = taxis.get(i);
-
-				if (taxi.getStatus().equals("left"))
-				{
-					final Date pickup = Taxi.dateFormat.parse(taxi.getPickupTime());
-					if ((new Date().getTime() - pickup.getTime()) > (PAGE_TIMEOUT * 3))
+				
+				if (taxi.getStatus().equals("left") || taxi.getStatus().equals("cancelled"))
+				{				
+					if(taxi.getPickupTime() == null)
 					{
 						continue;
 					}
+					final Date pickup = Taxi.dateFormat.parse(taxi.getPickupTime());
+					if ((new Date().getTime() - pickup.getTime()) > (PAGE_TIMEOUT * 3))
+					{
+						GWT.log("Skip TAXI" + taxi.getId());
+						continue;
+					}
 				}
-				else if(taxi.getUsedSpace() == 0)
+				else if (taxi.getUsedSpace() == 0)
 				{
+					GWT.log("Skip TAXI" + taxi.getId());					
 					continue;
 				}
 
@@ -210,7 +160,7 @@ public class TaxiShareUI implements EntryPoint
 				if (pages.size() <= currPage)
 				{
 					pages.add(currPage, new ArrayList<TaxiPanel>());
-				}
+				}		
 				pages.get(currPage).add(p);
 				heightRemaining -= 124;
 			}
@@ -282,6 +232,38 @@ public class TaxiShareUI implements EntryPoint
 		});
 	}
 
+	private static void updateInstructions()
+	{
+		String instructionString;
+		if (instance != null)
+		{
+			phoneNumber.setText(instance.getNumber());
+			
+			instructionString = "Book a taxi by sending a text message "
+					+ instance.getNumber()
+					+ " containing a one-word name (to identify yourself to the taxi-driver) followed by your destination. ";
+		}
+		else
+		{
+			instructionString = "Waiting";
+		}
+
+		String sampleDestination;
+		if (instance != null && instance.getDestinations().length() > 0)
+		{
+			sampleDestination = "You can type one of the destinations listed above (e.g. "
+					+ instance.getDestinations().get(0).getName()
+					+ "), or specify one of your own choosing (e.g. a postcode or a place name)";
+		}
+		else
+		{
+			sampleDestination = "You can specify a destination using a postcode (e.g. ng51bb) or a placename (e.g. Victoria Centre)";
+		}
+		instructions.setText(instructionString + sampleDestination);
+
+		// ivPanel.add(new Image("horizonIcon.png"), DockPanel.EAST);
+	}
+
 	public TaxiShareUI()
 	{
 		mf = new Highlight(taxisPanel.getElement());
@@ -297,7 +279,7 @@ public class TaxiShareUI implements EntryPoint
 
 				if (pages.size() == 0)
 				{
-					taxisPanel.add(new Label("System is currently experiencing issues"));
+					//taxisPanel.add(new Label(""));
 				}
 				else if (pageNum < pages.size())
 				{
@@ -326,19 +308,21 @@ public class TaxiShareUI implements EntryPoint
 	@Override
 	public void onModuleLoad()
 	{
+		try
+		{
 		if (RootPanel.get("activePanel") != null)
 		{
+			phoneNumber = Label.wrap(RootPanel.get("phoneNumber").getElement());
+			instructions = Label.wrap(RootPanel.get("instructions").getElement());
+
 			RootPanel.get("activePanel").add(taxisPanel);
 			RootPanel.get("destinationPanel").add(destinationPanel);
-			RootPanel.get("info").add(ivPanel);
 
 			taxisPanel.getElement().getStyle().setMargin(20, Unit.PX);
 
 			requestUpdate();
-
 			loadAttsPanel();
-			loadDestinationPanel();
-			loadInfoPanel();
+			updateInstructions();
 			loadCurrentPage();
 			f.play();
 
@@ -361,6 +345,12 @@ public class TaxiShareUI implements EntryPoint
 		else if (RootPanel.get("adminPanel") != null)
 		{
 			RootPanel.get("adminPanel").add(new TaxiShareAdmin(service));
+		}
+		}
+		catch(Exception e)
+		{
+			GWT.log(e.getMessage(), e);
+			taxisPanel.add(new Label(e.getMessage()));
 		}
 	}
 }

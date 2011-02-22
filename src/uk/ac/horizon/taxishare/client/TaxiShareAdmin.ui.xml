@@ -13,6 +13,7 @@
 		
 		.abs {
 			position: absolute;
+			overflow: auto;
 		}
 		
 		.clickable {

@@ -2,6 +2,7 @@ html {
 	font-family: Lucida, Arial, sans-serif;
 	padding: 0px;
 	margin: 0px;
+	overflow: hidden;
 }
 
 body {
@@ -45,8 +46,9 @@ body {
 	font-size: 20pt;
 }
 
-.instructionLabel {
+#instructions {
 	font-size: 18pt;
+	padding: 10px;
 }
 
 #infoPanel {
@@ -222,7 +224,7 @@ body {
 	letter-spacing: -1pt;
 }
 
-.infoTitleLabel {
+#phoneNumber {
 	text-transform: lowercase;
 	letter-spacing: -3pt;
 	font-size: 40pt;
@@ -230,7 +232,13 @@ body {
 	line-height: 75%;
 }
 
-.exampleLabel {
+.phonePanel {
+	float: left;
+	padding: 20px;
+	text-align: center;
+}
+
+#example {
 	text-transform: lowercase;
 	letter-spacing: -2pt;
 	font-size: 20pt;
